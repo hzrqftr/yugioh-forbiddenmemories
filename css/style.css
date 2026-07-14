@@ -744,7 +744,101 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
 /* ── Focus visible ───────────────────────────────────────────────────────── */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* ── Mobile: sidebar becomes an off-canvas file drawer ───────────────────── */
+/* Scrim sits behind the drawer, dims + captures taps to dismiss.
+   Injected once by ui.js so both pages share it. */
+.sidebar-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
+}
+
+@media (max-width: 768px) {
+  /* Drawer: fixed, off-screen until opened. Slides on transform, not width. */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    width: min(80vw, 264px);
+    transform: translateX(-100%);
+    transition: transform 0.24s ease;
+    box-shadow: 0 0 44px rgba(0, 0, 0, 0.55);
+    z-index: 60;
+  }
+  .sidebar.mobile-open { transform: translateX(0); }
+
+  /* Neutralize the desktop collapse (icon-strip) state on mobile —
+     the drawer is either fully open or fully hidden here. */
+  .sidebar.collapsed { width: min(80vw, 264px); }
+  .sidebar.collapsed .brand-name,
+  .sidebar.collapsed .nav-group-label,
+  .sidebar.collapsed .nav-label,
+  .sidebar.collapsed .theme-label { opacity: 1; pointer-events: auto; }
+
+  .sidebar-inner { width: 100%; }
+
+  /* Reveal the scrim while the drawer is open, and lock body scroll. */
+  body.sidebar-open { overflow: hidden; }
+  body.sidebar-open .sidebar-scrim { opacity: 1; pointer-events: auto; }
+
+  /* Main area now owns the full width — the source of the extra room. */
+  main {
+    max-width: none;
+    padding: 1.15rem;
+  }
+  header { padding: 1.35rem 1.15rem 1.05rem; }
+  footer { padding: 1.15rem; }
+  .panel { padding: 1.1rem; }
+
+  header h1 { font-size: 1.28rem; }
+  .subtitle { font-size: 0.85rem; }
+
+  /* Roomier tap target for the drawer trigger. */
+  .sidebar-hamburger { width: 38px; height: 34px; font-size: 1.05rem; }
+
+  /* 16px inputs stop iOS Safari from auto-zooming on focus. */
+  .input-with-clear input[type="text"],
+  .slot-search { font-size: 16px; }
+
+  /* Taller tap targets for the in-field clear/arrow controls. */
+  .icon-btn { padding: 0.5rem 0.6rem; }
+  .arrow-btn { right: 2.4rem; }
+
+  /* Nav rows and the theme toggle get more vertical room for thumbs. */
+  .nav-link { padding: 0.62rem 0.9rem; font-size: 0.82rem; }
+  .theme-toggle { padding: 0.6rem 0.7rem; font-size: 0.78rem; }
+
+  /* Submit spans the panel — a clear, full-width primary action. */
+  button[type="submit"] {
+    align-self: stretch;
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 1.25rem;
+  }
+
+  /* Keep the 5-wide hand/field layout (it mirrors the FM game),
+     just tighten the gutters so each card reads as large as possible. */
+  .card-slots { gap: 5px; }
+  .card-grid { gap: 1rem; }
+
+  /* Result cards: reclaim horizontal space. */
+  .result-card { padding: 0.9rem 1rem; }
+}
+
+/* Very narrow phones (≤380px): drop the sequence slots to a calmer scale. */
+@media (max-width: 380px) {
+  main { padding: 0.95rem; }
+  .card-slots { gap: 4px; }
+}
+
 /* ── Reduced motion ──────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .sidebar { transition: none; }
+  .sidebar-scrim { transition: none; }
 }
