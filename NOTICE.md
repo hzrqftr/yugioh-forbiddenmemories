@@ -37,21 +37,17 @@ under its own fair-use claim and cannot sublicense them. See
 ## Source code
 
 The application source code (HTML, CSS, and JavaScript) is original work by
-the project maintainer.
+the project maintainer and is licensed under the **MIT License** — see
+[`LICENSE`](LICENSE).
 
-> **TODO (maintainer):** choose a license for the code — e.g. add an
-> [MIT `LICENSE`](https://choosealicense.com/licenses/mit/) file, or state
-> "All rights reserved." This choice covers **only the original code**; it
-> does *not* apply to the card data (CC BY-SA 4.0) or the card artwork
-> (© Konami).
+This license covers **only the original code**. It does *not* apply to the
+card data (CC BY-SA 4.0) or the card artwork (© Konami).
 
 ## Takedown / rights-holder contact
 
 If you are a rights holder and believe any content here should be removed,
-please contact the maintainer and it will be taken down promptly.
-
-> **TODO (maintainer):** add a contact address here (a dedicated or role-based
-> email is fine — you don't need to publish a personal one).
+please contact the maintainer at **hazriq.fitri95@gmail.com** and it will be
+taken down promptly.
 
 ---
 
