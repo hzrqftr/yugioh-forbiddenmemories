@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forbidden Memories — Sequence Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  (function(){var t=localStorage.getItem('fm-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
+</script>
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="brand-sigil">FM</div>
+          <span class="brand-name">fm-tools</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <div class="nav-group">
+          <p class="nav-group-label">// pages</p>
+          <ul>
+            <li>
+              <a href="index.html" class="nav-link">
+                <span class="nav-dot"></span>
+                <span class="nav-label">fusion-finder.js</span>
+              </a>
+            </li>
+            <li>
+              <a href="sequencer.html" class="nav-link active" aria-current="page">
+                <span class="nav-dot"></span>
+                <span class="nav-label">sequence-planner.js</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-icon" id="theme-icon">○</span>
+          <span class="theme-label" id="theme-label">light mode</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="main-area">
+
+    <header>
+      <div class="header-row">
+        <button class="sidebar-hamburger" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+        <p class="page-path">~/fm-tools<span class="path-sep">/</span><span class="path-active">sequence-planner</span></p>
+      </div>
+      <h1>Sequence Planner</h1>
+      <p class="subtitle">
+        List the monsters in hand or on the field — finds every possible fusion order
+        and shows exactly which cards each result uses.
+      </p>
+    </header>
+
+    <main>
+      <form id="pool-form" class="panel" autocomplete="off">
+        <div class="card-grid">
+          <div class="grid-zone">
+            <div class="grid-label">hand</div>
+            <div class="card-slots" id="hand-slots"></div>
+          </div>
+          <div class="grid-zone">
+            <div class="grid-label">field</div>
+            <div class="card-slots" id="field-slots"></div>
+          </div>
+        </div>
+
+        <label class="checkbox-field">
+          <input type="checkbox" id="seq-include-glitch">
+          Include glitch fusions
+        </label>
+
+        <button type="submit">Find Sequences</button>
+      </form>
+
+      <section id="sequence-results" class="results-list" aria-live="polite"></section>
+    </main>
+
+    <footer>
+      <p>
+        Card and fusion data sourced from
+        <a href="https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions" target="_blank" rel="noopener">Yugipedia</a>.
+        Unofficial fan-made tool, not affiliated with Konami.
+      </p>
+    </footer>
+
+  </div>
+</div>
+
+<script src="js/fusion-core.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/sequencer.js"></script>
+</body>
+</html>

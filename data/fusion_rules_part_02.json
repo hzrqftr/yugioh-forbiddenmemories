@@ -1,0 +1,750 @@
+[
+  {
+    "resultId": "082",
+    "resultName": "Red-eyes B. Dragon",
+    "description": "\"Tyhone #2\" (\"Red Dragon\") + Black/Dark Dragon",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "555"
+        ],
+        "material2": [
+          "010",
+          "168",
+          "571"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "084",
+    "resultName": "Reaper of the Cards",
+    "description": "Glitch fusions",
+    "isGlitch": true,
+    "rules": [
+      {
+        "material1": [
+          "031"
+        ],
+        "material2": [
+          "034"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "092",
+    "resultName": "Rabid Horseman",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "026"
+        ],
+        "material2": [
+          "091"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "096",
+    "resultName": "Armored Zombie",
+    "description": "Zombie + Warrior or \"Zanki\" + cause of death",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "009",
+          "024",
+          "108",
+          "135",
+          "139",
+          "153",
+          "154",
+          "197",
+          "203",
+          "215",
+          "228",
+          "359",
+          "539",
+          "548",
+          "556"
+        ],
+        "material2": [
+          "041",
+          "120",
+          "151",
+          "165",
+          "225",
+          "256",
+          "294",
+          "299",
+          "352",
+          "354",
+          "502",
+          "553",
+          "559",
+          "641",
+          "649"
+        ]
+      },
+      {
+        "material1": [
+          "030",
+          "096",
+          "132",
+          "241",
+          "351",
+          "470"
+        ],
+        "material2": [
+          "041",
+          "100",
+          "107",
+          "110",
+          "118",
+          "120",
+          "147",
+          "151",
+          "156",
+          "160",
+          "161",
+          "165",
+          "166",
+          "172",
+          "182",
+          "185",
+          "195",
+          "214",
+          "224",
+          "225",
+          "226",
+          "231",
+          "235",
+          "239",
+          "250",
+          "256",
+          "262",
+          "266",
+          "267",
+          "280",
+          "290",
+          "293",
+          "294",
+          "299",
+          "352",
+          "354",
+          "362",
+          "399",
+          "469",
+          "502",
+          "553",
+          "559",
+          "586",
+          "635",
+          "641",
+          "649"
+        ]
+      },
+      {
+        "material1": [
+          "093"
+        ],
+        "material2": [
+          "653"
+        ]
+      },
+      {
+        "material1": [
+          "146"
+        ],
+        "material2": [
+          "120",
+          "151",
+          "165",
+          "225",
+          "256",
+          "294",
+          "299",
+          "352",
+          "354",
+          "502",
+          "553",
+          "559",
+          "641",
+          "649"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "097",
+    "resultName": "Dragon Zombie",
+    "description": "Dragon + Zombie or \"Crawling Dragon\" + cause of death",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "004",
+          "007",
+          "010",
+          "031",
+          "122",
+          "138",
+          "168",
+          "200",
+          "296",
+          "298",
+          "353",
+          "561",
+          "603"
+        ],
+        "material2": [
+          "009",
+          "024",
+          "030",
+          "036",
+          "096",
+          "098",
+          "108",
+          "132",
+          "135",
+          "139",
+          "146",
+          "153",
+          "154",
+          "197",
+          "203",
+          "215",
+          "470",
+          "539",
+          "548",
+          "556"
+        ]
+      },
+      {
+        "material1": [
+          "094"
+        ],
+        "material2": [
+          "329"
+        ]
+      },
+      {
+        "material1": [
+          "606"
+        ],
+        "material2": [
+          "108"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "098",
+    "resultName": "Clown Zombie",
+    "description": "\"Crass Clown\" + cause of death",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "095"
+        ],
+        "material2": [
+          "345"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "099",
+    "resultName": "Pumpking the King of Ghosts",
+    "description": "Zombie + Plant",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "030",
+          "036",
+          "096",
+          "097",
+          "098",
+          "132",
+          "215",
+          "228",
+          "241",
+          "351",
+          "359",
+          "545",
+          "596"
+        ],
+        "material2": [
+          "008",
+          "075",
+          "123",
+          "157",
+          "158",
+          "180",
+          "238",
+          "273",
+          "274",
+          "488",
+          "489",
+          "510",
+          "511",
+          "547",
+          "567",
+          "579",
+          "588",
+          "589",
+          "620",
+          "637"
+        ]
+      },
+      {
+        "material1": [
+          "489",
+          "511",
+          "567",
+          "620",
+          "637"
+        ],
+        "material2": [
+          "009",
+          "024",
+          "108",
+          "135",
+          "139",
+          "146",
+          "153",
+          "154",
+          "197",
+          "203",
+          "548",
+          "556"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "100",
+    "resultName": "Battle Warrior",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "009"
+        ],
+        "material2": [
+          "192"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "117",
+    "resultName": "Spirit of the Books",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "486"
+        ],
+        "material2": [
+          "013",
+          "062",
+          "186",
+          "207",
+          "272",
+          "300",
+          "468",
+          "538",
+          "552",
+          "595"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "132",
+    "resultName": "The 13th Grave",
+    "description": "Glitch fusions",
+    "isGlitch": true,
+    "rules": [
+      {
+        "material1": [
+          "066"
+        ],
+        "material2": [
+          "098"
+        ]
+      },
+      {
+        "material1": [
+          "120"
+        ],
+        "material2": [
+          "166"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "133",
+    "resultName": "Charubin the Fire Knight",
+    "description": "Pyro + Warrior",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "040",
+          "101",
+          "142",
+          "176",
+          "210",
+          "242",
+          "244",
+          "417",
+          "644"
+        ],
+        "material2": [
+          "100",
+          "107",
+          "118",
+          "147",
+          "156",
+          "160",
+          "161",
+          "166",
+          "172",
+          "182",
+          "185",
+          "195",
+          "214",
+          "224",
+          "226",
+          "231",
+          "235",
+          "236",
+          "239",
+          "250",
+          "262",
+          "266",
+          "267",
+          "280",
+          "362",
+          "399",
+          "469",
+          "586",
+          "635"
+        ]
+      },
+      {
+        "material1": [
+          "157"
+        ],
+        "material2": [
+          "100",
+          "107",
+          "118",
+          "147",
+          "156",
+          "160",
+          "161",
+          "166",
+          "172",
+          "182",
+          "185",
+          "195",
+          "214",
+          "224",
+          "226",
+          "231",
+          "235",
+          "236",
+          "250",
+          "262",
+          "267",
+          "362",
+          "399",
+          "469",
+          "586"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "136",
+    "resultName": "Witty Phantom",
+    "description": "Glitch fusions",
+    "isGlitch": true,
+    "rules": [
+      {
+        "material1": [
+          "045"
+        ],
+        "material2": [
+          "170"
+        ]
+      },
+      {
+        "material1": [
+          "061"
+        ],
+        "material2": [
+          "144"
+        ]
+      },
+      {
+        "material1": [
+          "090"
+        ],
+        "material2": [
+          "130"
+        ]
+      },
+      {
+        "material1": [
+          "096"
+        ],
+        "material2": [
+          "231"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "138",
+    "resultName": "Dragon Statue",
+    "description": "Dragon + Warrior",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "122",
+          "200",
+          "296",
+          "298"
+        ],
+        "material2": [
+          "100",
+          "107",
+          "118",
+          "147",
+          "156",
+          "160",
+          "161",
+          "166",
+          "172",
+          "182",
+          "185",
+          "195",
+          "214",
+          "224",
+          "226",
+          "231",
+          "235",
+          "236",
+          "239",
+          "250",
+          "262",
+          "266",
+          "267",
+          "280",
+          "362",
+          "399",
+          "469",
+          "586",
+          "635"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "149",
+    "resultName": "Lord of the Lamp",
+    "description": "\"Mystic Lamp\" + Spellcaster",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "387"
+        ],
+        "material2": [
+          "016",
+          "017",
+          "018",
+          "019",
+          "020",
+          "021",
+          "034",
+          "042",
+          "104",
+          "114",
+          "115",
+          "128",
+          "129",
+          "142",
+          "143",
+          "144",
+          "145",
+          "174",
+          "179",
+          "183",
+          "184",
+          "190",
+          "213",
+          "216",
+          "220",
+          "253",
+          "259",
+          "268",
+          "284",
+          "387",
+          "428",
+          "486",
+          "525",
+          "530",
+          "574",
+          "578",
+          "612",
+          "628"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "154",
+    "resultName": "Fire Reaper",
+    "description": "Pyro + Zombie",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "040",
+          "210",
+          "242",
+          "644"
+        ],
+        "material2": [
+          "009",
+          "024",
+          "135",
+          "197",
+          "203",
+          "548"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "157",
+    "resultName": "Firegrass",
+    "description": "Pyro + Plant",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "040",
+          "210",
+          "242",
+          "644"
+        ],
+        "material2": [
+          "123",
+          "273",
+          "274",
+          "488",
+          "547",
+          "589"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "162",
+    "resultName": "Tainted Wisdom",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "175"
+        ],
+        "material2": [
+          "684"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "168",
+    "resultName": "Darkfire Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "393"
+        ],
+        "material2": [
+          "686"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "171",
+    "resultName": "Big Eye",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "402"
+        ],
+        "material2": [
+          "681"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "193",
+    "resultName": "Turtle Tiger",
+    "description": "Turtle + Beast",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "177",
+          "503"
+        ],
+        "material2": [
+          "113",
+          "121",
+          "155",
+          "159",
+          "187",
+          "188",
+          "189",
+          "202",
+          "212",
+          "255",
+          "282",
+          "481",
+          "527",
+          "541",
+          "598",
+          "604",
+          "629"
+        ]
+      }
+    ]
+  }
+]

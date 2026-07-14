@@ -1,0 +1,570 @@
+[
+  {
+    "resultId": "215",
+    "resultName": "Flame Ghost",
+    "description": "Pyro + Zombie",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "040",
+          "210",
+          "242",
+          "644"
+        ],
+        "material2": [
+          "108",
+          "139",
+          "146",
+          "153",
+          "154",
+          "556"
+        ]
+      },
+      {
+        "material1": [
+          "101",
+          "176",
+          "417"
+        ],
+        "material2": [
+          "009",
+          "024",
+          "108",
+          "135",
+          "139",
+          "146",
+          "153",
+          "154",
+          "197",
+          "203",
+          "548",
+          "556"
+        ]
+      },
+      {
+        "material1": [
+          "154"
+        ],
+        "material2": [
+          "009",
+          "024",
+          "135",
+          "139",
+          "146",
+          "153",
+          "154",
+          "197",
+          "203",
+          "548",
+          "556"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "217",
+    "resultName": "B. Skull Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "022"
+        ],
+        "material2": [
+          "082"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "228",
+    "resultName": "Wood Remains",
+    "description": "Zombie + Plant",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "009",
+          "024",
+          "108",
+          "135",
+          "139",
+          "146",
+          "153",
+          "154",
+          "197",
+          "203",
+          "548",
+          "556"
+        ],
+        "material2": [
+          "008",
+          "075",
+          "123",
+          "157",
+          "158",
+          "180",
+          "238",
+          "273",
+          "274",
+          "488",
+          "510",
+          "547",
+          "579",
+          "588",
+          "589"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "230",
+    "resultName": "Rare Fish",
+    "description": "Beast + Fish",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "023",
+          "404"
+        ],
+        "material2": [
+          "247",
+          "251",
+          "436",
+          "546",
+          "626"
+        ]
+      },
+      {
+        "material1": [
+          "542",
+          "543"
+        ],
+        "material2": [
+          "023",
+          "046",
+          "047",
+          "061",
+          "065",
+          "091",
+          "113",
+          "121",
+          "155",
+          "159",
+          "163",
+          "187",
+          "188",
+          "189",
+          "201",
+          "202",
+          "212",
+          "248",
+          "252",
+          "255",
+          "282",
+          "384",
+          "404",
+          "481",
+          "496",
+          "527",
+          "541",
+          "587",
+          "598",
+          "604",
+          "607",
+          "629",
+          "642"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "244",
+    "resultName": "Dissolverock",
+    "description": "Pyro + Rock",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "040",
+          "101",
+          "157",
+          "176",
+          "210",
+          "242",
+          "417",
+          "644"
+        ],
+        "material2": [
+          "028",
+          "167",
+          "237",
+          "257",
+          "263",
+          "366",
+          "505",
+          "516",
+          "558",
+          "591"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "251",
+    "resultName": "Enchanting Mermaid",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "431"
+        ],
+        "material2": [
+          "247",
+          "436"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "272",
+    "resultName": "Mavelus",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "013",
+          "186",
+          "207",
+          "300",
+          "468",
+          "538",
+          "552"
+        ],
+        "material2": [
+          "040",
+          "101",
+          "133",
+          "142",
+          "154",
+          "157",
+          "172",
+          "176",
+          "210",
+          "214",
+          "215",
+          "242",
+          "244",
+          "417",
+          "644"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "294",
+    "resultName": "Dragoness the Wicked Knight",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "122",
+          "200",
+          "296",
+          "298"
+        ],
+        "material2": [
+          "110",
+          "290",
+          "293"
+        ]
+      },
+      {
+        "material1": [
+          "138"
+        ],
+        "material2": [
+          "100",
+          "107",
+          "110",
+          "118",
+          "122",
+          "138",
+          "147",
+          "156",
+          "160",
+          "161",
+          "166",
+          "182",
+          "185",
+          "195",
+          "200",
+          "224",
+          "226",
+          "231",
+          "235",
+          "236",
+          "239",
+          "250",
+          "262",
+          "266",
+          "267",
+          "280",
+          "290",
+          "293",
+          "296",
+          "298",
+          "362",
+          "399",
+          "469",
+          "586",
+          "603",
+          "635"
+        ]
+      },
+      {
+        "material1": [
+          "603"
+        ],
+        "material2": [
+          "100",
+          "107",
+          "110",
+          "118",
+          "147",
+          "156",
+          "160",
+          "161",
+          "166",
+          "172",
+          "182",
+          "185",
+          "195",
+          "214",
+          "224",
+          "226",
+          "231",
+          "235",
+          "236",
+          "239",
+          "250",
+          "262",
+          "266",
+          "267",
+          "280",
+          "290",
+          "293",
+          "362",
+          "399",
+          "469",
+          "586",
+          "635"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "301",
+    "resultName": "Legendary Sword",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "015"
+        ],
+        "material2": [
+          "334"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "302",
+    "resultName": "Sword of Dark Destruction",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "096"
+        ],
+        "material2": [
+          "656"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "303",
+    "resultName": "Dark Energy",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "335"
+        ],
+        "material2": [
+          "335"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "304",
+    "resultName": "Axe of Despair",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "064"
+        ],
+        "material2": [
+          "683"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "305",
+    "resultName": "Laser Cannon Armor",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "322"
+        ],
+        "material2": [
+          "325"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "306",
+    "resultName": "Insect Armor with Laser Cannon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "325"
+        ],
+        "material2": [
+          "344"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "307",
+    "resultName": "Elf's Light",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "433"
+        ],
+        "material2": [
+          "681"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "308",
+    "resultName": "Beast Fangs",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "345"
+        ],
+        "material2": [
+          "398"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "309",
+    "resultName": "Steel Shell",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "177"
+        ],
+        "material2": [
+          "345"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "310",
+    "resultName": "Vile Germs",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [],
+        "material2": [
+          "318"
+        ]
+      },
+      {
+        "material1": [
+          "330"
+        ],
+        "material2": [
+          "661"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "311",
+    "resultName": "Black Pendant",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "325"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "314",
+    "resultName": "Horn of the Unicorn",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "326"
+        ],
+        "material2": [
+          "689"
+        ]
+      }
+    ]
+  }
+]

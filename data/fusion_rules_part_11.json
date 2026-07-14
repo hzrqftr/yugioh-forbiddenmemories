@@ -1,0 +1,130 @@
+[
+  {
+    "resultId": "694",
+    "resultName": "Resurrection of Chakra",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "321"
+        ],
+        "material2": [
+          "321"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "695",
+    "resultName": "Puppet Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "658"
+        ],
+        "material2": [
+          "660"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "696",
+    "resultName": "Javelin Beetle Pact",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "328"
+        ],
+        "material2": [
+          "330"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "697",
+    "resultName": "Garma Sword Oath",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "301"
+        ],
+        "material2": [
+          "318"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "698",
+    "resultName": "Cosmo Queen's Prayer",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "317"
+        ],
+        "material2": [
+          "321"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "699",
+    "resultName": "Revival of Skeleton Rider",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "325"
+        ],
+        "material2": [
+          "331"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "700",
+    "resultName": "Fortress Whale's Oath",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "325"
+        ],
+        "material2": [
+          "334"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "713",
+    "resultName": "Meteor B. Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "082"
+        ],
+        "material2": [
+          "712"
+        ]
+      }
+    ]
+  }
+]

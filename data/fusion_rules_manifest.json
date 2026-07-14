@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "game": "Yu-Gi-Oh! Forbidden Memories",
+  "generatedOn": "2026-07-13",
+  "resultCount": 208,
+  "source": {
+    "publisher": "Yugipedia",
+    "index": "https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions",
+    "pages": [
+      "https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(001%E2%80%93200)",
+      "https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(201%E2%80%93400)",
+      "https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(401%E2%80%93600)",
+      "https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions_(601%E2%80%93722)"
+    ],
+    "attribution": "Fusion data sourced from Yugipedia. Retain attribution and comply with the source site's license when publishing."
+  },
+  "parts": [
+    "fusion_rules_part_01.json",
+    "fusion_rules_part_02.json",
+    "fusion_rules_part_03.json",
+    "fusion_rules_part_04.json",
+    "fusion_rules_part_05.json",
+    "fusion_rules_part_06.json",
+    "fusion_rules_part_07.json",
+    "fusion_rules_part_08.json",
+    "fusion_rules_part_09.json",
+    "fusion_rules_part_10.json",
+    "fusion_rules_part_11.json"
+  ]
+}

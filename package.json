@@ -1,0 +1,9 @@
+{
+  "name": "yugioh-forbiddenmemories",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Forbidden Memories fusion finder (static site for GitHub Pages)",
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

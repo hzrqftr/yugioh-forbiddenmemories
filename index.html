@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forbidden Memories — Fusion Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  (function(){var t=localStorage.getItem('fm-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
+</script>
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="brand-sigil">FM</div>
+          <span class="brand-name">fm-tools</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <div class="nav-group">
+          <p class="nav-group-label">// pages</p>
+          <ul>
+            <li>
+              <a href="index.html" class="nav-link active" aria-current="page">
+                <span class="nav-dot"></span>
+                <span class="nav-label">fusion-finder.js</span>
+              </a>
+            </li>
+            <li>
+              <a href="sequencer.html" class="nav-link">
+                <span class="nav-dot"></span>
+                <span class="nav-label">sequence-planner.js</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-icon" id="theme-icon">○</span>
+          <span class="theme-label" id="theme-label">light mode</span>
+        </button>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="main-area">
+
+    <header>
+      <div class="header-row">
+        <button class="sidebar-hamburger" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+        <p class="page-path">~/fm-tools<span class="path-sep">/</span><span class="path-active">fusion-finder</span></p>
+      </div>
+      <h1>Fusion Finder</h1>
+      <p class="subtitle">Pick two material monsters to see what they fuse into.</p>
+    </header>
+
+    <main>
+      <form id="fusion-form" class="panel" autocomplete="off">
+        <div class="field">
+          <label for="material1">Material 1</label>
+          <div class="combo">
+            <div class="input-with-clear">
+              <input type="text" id="material1" placeholder="Start typing a monster name..." autocomplete="off"
+                     role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="material1-listbox">
+              <button type="button" class="icon-btn arrow-btn" id="toggle-material1" aria-label="Show all Material 1 options">&#9662;</button>
+              <button type="button" class="icon-btn clear-btn" id="clear-material1" aria-label="Clear Material 1">&times;</button>
+            </div>
+            <ul class="combo-list" id="material1-listbox" role="listbox" hidden></ul>
+          </div>
+        </div>
+        <div class="field">
+          <label for="material2">Material 2</label>
+          <div class="combo">
+            <div class="input-with-clear">
+              <input type="text" id="material2" placeholder="Select Material 1 first..." autocomplete="off" disabled
+                     role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="material2-listbox">
+              <button type="button" class="icon-btn arrow-btn" id="toggle-material2" aria-label="Show all Material 2 options" disabled>&#9662;</button>
+              <button type="button" class="icon-btn clear-btn" id="clear-material2" aria-label="Clear Material 2" disabled>&times;</button>
+            </div>
+            <ul class="combo-list" id="material2-listbox" role="listbox" hidden></ul>
+          </div>
+          <p class="hint" id="material2-hint"></p>
+        </div>
+
+        <label class="checkbox-field">
+          <input type="checkbox" id="include-glitch">
+          Include glitch fusions
+        </label>
+
+        <button type="submit">Find Fusion</button>
+      </form>
+
+      <section id="results" class="results-list" aria-live="polite"></section>
+    </main>
+
+    <footer>
+      <p>
+        Card and fusion data sourced from
+        <a href="https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions" target="_blank" rel="noopener">Yugipedia</a>.
+        Unofficial fan-made tool, not affiliated with Konami.
+      </p>
+    </footer>
+
+  </div>
+</div>
+
+<script src="js/fusion-core.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

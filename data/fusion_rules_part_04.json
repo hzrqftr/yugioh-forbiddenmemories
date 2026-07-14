@@ -1,0 +1,333 @@
+[
+  {
+    "resultId": "316",
+    "resultName": "Electro-whip",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "653"
+        ],
+        "material2": [
+          "376",
+          "434"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "318",
+    "resultName": "Elegant Egotist",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "316"
+        ],
+        "material2": [
+          "103",
+          "261",
+          "365"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "320",
+    "resultName": "Stop Defense",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "362"
+        ],
+        "material2": [
+          "689"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "322",
+    "resultName": "Violet Crystal",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "505"
+        ],
+        "material2": [
+          "663"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "323",
+    "resultName": "Book of Secret Arts",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "350"
+        ],
+        "material2": [
+          "486"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "324",
+    "resultName": "Invigoration",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "318"
+        ],
+        "material2": [
+          "337"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "325",
+    "resultName": "Machine Conversion Factory",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "658"
+        ],
+        "material2": [
+          "681"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "326",
+    "resultName": "Raise Body Heat",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "338"
+        ],
+        "material2": [
+          "343"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "328",
+    "resultName": "Power of Kaishin",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "334"
+        ],
+        "material2": [
+          "663"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "329",
+    "resultName": "Dragon Capture Jar",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "315"
+        ],
+        "material2": [
+          "338"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "330",
+    "resultName": "Forest",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "310"
+        ],
+        "material2": [
+          "657"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "331",
+    "resultName": "Wasteland",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "330"
+        ],
+        "material2": [
+          "346"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "336",
+    "resultName": "Dark Hole",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "685"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "337",
+    "resultName": "Raigeki",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "316"
+        ],
+        "material2": [
+          "658"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "340",
+    "resultName": "Goblin's Secret Remedy",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "339"
+        ],
+        "material2": [
+          "339"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "341",
+    "resultName": "Soul of the Pure",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "340"
+        ],
+        "material2": [
+          "340"
+        ]
+      },
+      {
+        "material1": [
+          "659"
+        ],
+        "material2": [
+          "659"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "342",
+    "resultName": "Dian Keto the Cure Master",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "341"
+        ],
+        "material2": [
+          "341"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "344",
+    "resultName": "Hinotama",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "343"
+        ],
+        "material2": [
+          "343"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "345",
+    "resultName": "Final Flame",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "344"
+        ],
+        "material2": [
+          "344"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "346",
+    "resultName": "Ookazi",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "345"
+        ],
+        "material2": [
+          "345"
+        ]
+      }
+    ]
+  }
+]

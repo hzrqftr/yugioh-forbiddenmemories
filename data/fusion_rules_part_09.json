@@ -1,0 +1,420 @@
+[
+  {
+    "resultId": "654",
+    "resultName": "Salamandra",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "301"
+        ],
+        "material2": [
+          "343"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "655",
+    "resultName": "Cursebreaker",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "192"
+        ],
+        "material2": [
+          "318"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "656",
+    "resultName": "Eternal Rest",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "307"
+        ],
+        "material2": [
+          "312"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "657",
+    "resultName": "Megamorph",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "342"
+        ],
+        "material2": [
+          "342"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "658",
+    "resultName": "Metalmorph",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "088"
+        ],
+        "material2": [
+          "316",
+          "325"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "659",
+    "resultName": "Winged Trumpeter",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "312"
+        ],
+        "material2": [
+          "325"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "660",
+    "resultName": "Stain Storm",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "316"
+        ],
+        "material2": [
+          "334"
+        ]
+      },
+      {
+        "material1": [
+          "327"
+        ],
+        "material2": [
+          "685"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "661",
+    "resultName": "Crush Card",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "310"
+        ],
+        "material2": [
+          "658"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "662",
+    "resultName": "Eradicating Aerosol",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "340"
+        ],
+        "material2": [
+          "325",
+          "327"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "663",
+    "resultName": "Breath of Light",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "327"
+        ],
+        "material2": [
+          "331"
+        ]
+      },
+      {
+        "material1": [
+          "687"
+        ],
+        "material2": [
+          "688"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "664",
+    "resultName": "Eternal Draught",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "334"
+        ],
+        "material2": [
+          "319",
+          "336",
+          "347"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "665",
+    "resultName": "Curse of Millennium Shield",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "658"
+        ],
+        "material2": [
+          "658"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "666",
+    "resultName": "Yamadron Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "315"
+        ],
+        "material2": [
+          "318"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "667",
+    "resultName": "Gate Guardian Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "652"
+        ],
+        "material2": [
+          "658"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "668",
+    "resultName": "Bright Castle",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "083"
+        ],
+        "material2": [
+          "350"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "669",
+    "resultName": "Shadow Spell",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "349"
+        ],
+        "material2": [
+          "349"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "670",
+    "resultName": "Black Luster Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "350"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "671",
+    "resultName": "Zera Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "321"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "672",
+    "resultName": "Harpie's Feather Duster",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "062",
+          "063"
+        ],
+        "material2": [
+          "062",
+          "063",
+          "325",
+          "652",
+          "681",
+          "682",
+          "683",
+          "684"
+        ]
+      },
+      {
+        "material1": [
+          "325"
+        ],
+        "material2": [
+          "125",
+          "128",
+          "163",
+          "186",
+          "189",
+          "198",
+          "229",
+          "253",
+          "264",
+          "272",
+          "327",
+          "361",
+          "424",
+          "464",
+          "465",
+          "466",
+          "467",
+          "468",
+          "491",
+          "522",
+          "540",
+          "541",
+          "581",
+          "582",
+          "601",
+          "608",
+          "616",
+          "631",
+          "633",
+          "636",
+          "659"
+        ]
+      },
+      {
+        "material1": [
+          "683"
+        ],
+        "material2": [
+          "125",
+          "128",
+          "163",
+          "189",
+          "198",
+          "229",
+          "253",
+          "264",
+          "272",
+          "464",
+          "465",
+          "466",
+          "468",
+          "491",
+          "522",
+          "581",
+          "636"
+        ]
+      },
+      {
+        "material1": [
+          "361"
+        ],
+        "material2": [
+          "684"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "673",
+    "resultName": "War-lion Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "308"
+        ],
+        "material2": [
+          "318"
+        ]
+      }
+    ]
+  }
+]

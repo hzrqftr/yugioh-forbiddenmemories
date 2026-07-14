@@ -1,0 +1,348 @@
+[
+  {
+    "resultId": "674",
+    "resultName": "Beastry Mirror Ritual",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "318"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "675",
+    "resultName": "Ultimate Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "315"
+        ],
+        "material2": [
+          "657"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "676",
+    "resultName": "Commencement Dance",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "317"
+        ],
+        "material2": [
+          "659"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "677",
+    "resultName": "Hamburger Recipe",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "323"
+        ],
+        "material2": [
+          "338"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "678",
+    "resultName": "Revival of Sennen Genjin",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "318"
+        ],
+        "material2": [
+          "319"
+        ]
+      },
+      {
+        "material1": [
+          "665"
+        ],
+        "material2": [
+          "695"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "679",
+    "resultName": "Novox's Prayer",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "651"
+        ],
+        "material2": [
+          "656"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "680",
+    "resultName": "Curse of Tri-Horned Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "318"
+        ],
+        "material2": [
+          "313",
+          "314"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "681",
+    "resultName": "House of Adhesive Tape",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "652"
+        ],
+        "material2": [
+          "662"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "682",
+    "resultName": "Eatgaboon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "308"
+        ],
+        "material2": [
+          "308"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "683",
+    "resultName": "Bear Trap",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "308"
+        ],
+        "material2": [
+          "657"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "684",
+    "resultName": "Invisible Wire",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "311"
+        ],
+        "material2": [
+          "335"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "685",
+    "resultName": "Acid Trap Hole",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "336"
+        ],
+        "material2": [
+          "660"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "686",
+    "resultName": "Widespread Ruin",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "329"
+        ],
+        "material2": [
+          "347"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "687",
+    "resultName": "Goblin Fan",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "327"
+        ],
+        "material2": [
+          "663"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "688",
+    "resultName": "Bad Reaction to Simochi",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "338"
+        ],
+        "material2": [
+          "338"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "689",
+    "resultName": "Reverse Trap",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "657"
+        ],
+        "material2": [
+          "655",
+          "690"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "690",
+    "resultName": "Fake Trap",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "349"
+        ],
+        "material2": [
+          "655"
+        ]
+      },
+      {
+        "material1": [
+          "686"
+        ],
+        "material2": [
+          "689"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "691",
+    "resultName": "Revived of Serpent Night Dragon",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "303"
+        ],
+        "material2": [
+          "315"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "692",
+    "resultName": "Turtle Oath",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "309"
+        ],
+        "material2": [
+          "690"
+        ]
+      },
+      {
+        "material1": [
+          "328"
+        ],
+        "material2": [
+          "334"
+        ]
+      }
+    ]
+  },
+  {
+    "resultId": "693",
+    "resultName": "Contruct of Mask",
+    "description": "",
+    "isGlitch": false,
+    "rules": [
+      {
+        "material1": [
+          "307"
+        ],
+        "material2": [
+          "321"
+        ]
+      }
+    ]
+  }
+]
