@@ -42,8 +42,9 @@ Source: Yugipedia's [Forbidden Memories fusion index](https://yugipedia.com/wiki
 ~~~
 
 `source` values:
-- `fm-game-art` (616 cards) — authentic Forbidden Memories in-game artwork (`*-FMR-EN-VG`).
+- `fm-game-art` (618 cards) — authentic Forbidden Memories in-game artwork (`*-FMR-EN-VG` or regional equivalent).
 - `tcg-print` (104 cards) — no FM art on the wiki; a TCG/other print is used as a fallback, so the art differs from the game.
-- `null` (2 cards: #206 Twin Long Rods #1, #557 Steel Ogre Grotto #1) — no image available on the wiki; `localPath` is `null`. Show a placeholder.
+
+All 722 cards now have an image. #206 (Twin Long Rods #1) and #557 (Steel Ogre Grotto #1) had no art on the Fandom wiki at scrape time; they were added by hand afterward from Fandom and Yugipedia respectively (see their `sourceUrl`), so there's no `null` case left to handle in the UI, though it's still safe to leave that fallback in place.
 
 Images were scraped from the [Yugipedia/Fandom Yu-Gi-Oh! wiki](https://yugioh.fandom.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_cards) via its MediaWiki API and are served as WebP. Card artwork is © Konami; retain attribution and comply with the source site's license when publishing.

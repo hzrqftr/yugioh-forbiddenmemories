@@ -1437,9 +1437,9 @@
   {
     "number": "206",
     "name": "Twin Long Rods #1",
-    "source": null,
-    "sourceUrl": null,
-    "localPath": null
+    "source": "fm-game-art",
+    "sourceUrl": "https://yugioh.fandom.com/wiki/Twin_Long_Rods_1_(FMR)?file=TwinLongRods-1-FMR-EN-VG.png",
+    "localPath": "images/206.webp"
   },
   {
     "number": "207",
@@ -3894,9 +3894,9 @@
   {
     "number": "557",
     "name": "Steel Ogre Grotto #1",
-    "source": null,
-    "sourceUrl": null,
-    "localPath": null
+    "source": "fm-game-art",
+    "sourceUrl": "https://yugipedia.com/wiki/Steel_Ogre_Grotto_1_(FMR)#/media/File:SteelOgreGrotto1-FMR-NA-VG.png",
+    "localPath": "images/557.webp"
   },
   {
     "number": "558",
