@@ -266,6 +266,128 @@ function setupCombobox({ input, listEl, toggleBtn, clearBtn, getOptions, onChang
   });
 }
 
+// A single shared floating card picker: click an anchor (e.g. a card slot),
+// search, and choose a card. Generalized from the Sequence Planner's inline
+// picker so any page can reuse one instance. (The sequencer keeps its own
+// slot-bound picker for now; this is used by the Fusion Finder's equation.)
+let _cardPicker = null;
+
+function ensureCardPicker() {
+  if (_cardPicker) return _cardPicker;
+
+  const el = document.createElement('div');
+  el.className = 'slot-picker';
+  el.hidden = true;
+  el.innerHTML = `
+    <input type="text" class="slot-search" placeholder="Search card…" autocomplete="off">
+    <ul class="slot-list" role="listbox"></ul>
+  `;
+  document.body.appendChild(el);
+
+  const searchEl = el.querySelector('.slot-search');
+  const listEl = el.querySelector('.slot-list');
+  const picker = { el, searchEl, listEl, anchorEl: null, options: [], onSelect: null, activeIndex: -1 };
+  _cardPicker = picker;
+
+  function render() {
+    const opts = filterOptions(picker.options, searchEl.value);
+    picker.activeIndex = opts.length ? 0 : -1;
+    if (opts.length === 0) {
+      listEl.innerHTML = '<li class="combo-empty">No matches</li>';
+      return;
+    }
+    listEl.innerHTML = opts
+      .map((o, i) => `<li role="option" data-id="${escapeHtml(o.id)}" data-index="${i}" class="${i === 0 ? 'active' : ''}">${escapeHtml(o.label)}</li>`)
+      .join('');
+  }
+  picker._render = render;
+
+  function syncActive(items) {
+    items.forEach((it, i) => it.classList.toggle('active', i === picker.activeIndex));
+    const it = items[picker.activeIndex];
+    if (it) it.scrollIntoView({ block: 'nearest' });
+  }
+
+  function choose(id) {
+    const cb = picker.onSelect;
+    closeCardPicker();
+    if (cb) cb(id);
+  }
+
+  searchEl.addEventListener('input', render);
+  searchEl.addEventListener('keydown', (e) => {
+    const items = [...listEl.querySelectorAll('li[data-index]')];
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      picker.activeIndex = Math.min(picker.activeIndex + 1, items.length - 1);
+      syncActive(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      picker.activeIndex = Math.max(picker.activeIndex - 1, 0);
+      syncActive(items);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const item = items[picker.activeIndex];
+      if (item) choose(item.dataset.id);
+    } else if (e.key === 'Escape') {
+      closeCardPicker();
+    }
+  });
+
+  // mousedown + preventDefault so the search input doesn't blur before select.
+  listEl.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    const li = e.target.closest('li[data-id]');
+    if (li) choose(li.dataset.id);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (el.hidden) return;
+    if (!el.contains(e.target) && (!picker.anchorEl || !picker.anchorEl.contains(e.target))) {
+      closeCardPicker();
+    }
+  });
+
+  return picker;
+}
+
+// Open the shared picker anchored under `anchorEl`. `options` is a list of
+// {id,label,name}; `onSelect(id)` fires when the user commits a choice.
+function openCardPicker(anchorEl, { options, onSelect }) {
+  const picker = ensureCardPicker();
+
+  // Clicking the same anchor again toggles the picker closed.
+  if (!picker.el.hidden && picker.anchorEl === anchorEl) {
+    closeCardPicker();
+    return;
+  }
+
+  picker.anchorEl = anchorEl;
+  picker.options = options;
+  picker.onSelect = onSelect;
+  picker.searchEl.value = '';
+  picker._render();
+
+  const rect = anchorEl.getBoundingClientRect();
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+  picker.el.style.top = (rect.bottom + scrollTop + 4) + 'px';
+  picker.el.style.left = (rect.left + scrollLeft) + 'px';
+  picker.el.style.width = Math.max(rect.width, 220) + 'px';
+
+  picker.el.hidden = false;
+  anchorEl.classList.add('active');
+  picker.searchEl.focus();
+}
+
+function closeCardPicker() {
+  if (!_cardPicker) return;
+  if (_cardPicker.anchorEl) _cardPicker.anchorEl.classList.remove('active');
+  _cardPicker.el.hidden = true;
+  _cardPicker.anchorEl = null;
+  _cardPicker.activeIndex = -1;
+}
+
 // Clicking a <label for="..."> natively focuses its control; suppress that
 // so clicking a label counts as "clicking away" like anywhere else. Delegated
 // on document so it also covers labels added to the page later.

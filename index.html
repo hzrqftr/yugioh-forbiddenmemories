@@ -13,6 +13,10 @@
 </script>
 </head>
 <body>
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+  <span class="theme-icon" id="theme-icon">○</span>
+  <span class="theme-label" id="theme-label">light mode</span>
+</button>
 <div class="app-shell">
 
   <aside class="sidebar" id="sidebar">
@@ -45,13 +49,6 @@
         </div>
       </nav>
 
-      <div class="sidebar-footer">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
-          <span class="theme-icon" id="theme-icon">○</span>
-          <span class="theme-label" id="theme-label">light mode</span>
-        </button>
-      </div>
-
     </div>
   </aside>
 
@@ -63,46 +60,19 @@
         <p class="page-path">~/fm-tools<span class="path-sep">/</span><span class="path-active">fusion-finder</span></p>
       </div>
       <h1>Fusion Finder</h1>
-      <p class="subtitle">Pick two material monsters to see what they fuse into.</p>
+      <p class="subtitle">Build a fusion step by step — pick two monsters, then keep fusing the result forward.</p>
     </header>
 
     <main>
-      <form id="fusion-form" class="panel" autocomplete="off">
-        <div class="field">
-          <label for="material1">Material 1</label>
-          <div class="combo">
-            <div class="input-with-clear">
-              <input type="text" id="material1" placeholder="Start typing a monster name..." autocomplete="off"
-                     role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="material1-listbox">
-              <button type="button" class="icon-btn arrow-btn" id="toggle-material1" aria-label="Show all Material 1 options">&#9662;</button>
-              <button type="button" class="icon-btn clear-btn" id="clear-material1" aria-label="Clear Material 1">&times;</button>
-            </div>
-            <ul class="combo-list" id="material1-listbox" role="listbox" hidden></ul>
-          </div>
-        </div>
-        <div class="field">
-          <label for="material2">Material 2</label>
-          <div class="combo">
-            <div class="input-with-clear">
-              <input type="text" id="material2" placeholder="Select Material 1 first..." autocomplete="off" disabled
-                     role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="material2-listbox">
-              <button type="button" class="icon-btn arrow-btn" id="toggle-material2" aria-label="Show all Material 2 options" disabled>&#9662;</button>
-              <button type="button" class="icon-btn clear-btn" id="clear-material2" aria-label="Clear Material 2" disabled>&times;</button>
-            </div>
-            <ul class="combo-list" id="material2-listbox" role="listbox" hidden></ul>
-          </div>
-          <p class="hint" id="material2-hint"></p>
-        </div>
-
+      <div class="chain-controls">
         <label class="checkbox-field">
           <input type="checkbox" id="include-glitch">
           Include glitch fusions
         </label>
+        <button type="button" class="secondary" id="reset-chain">Reset</button>
+      </div>
 
-        <button type="submit">Find Fusion</button>
-      </form>
-
-      <section id="results" class="results-list" aria-live="polite"></section>
+      <div id="fusion-chain" class="fusion-chain" aria-live="polite"></div>
     </main>
 
     <footer>

@@ -142,8 +142,7 @@ body {
 /* Collapsed-state: fade text, keep icons visible in the 44px strip */
 .sidebar.collapsed .brand-name,
 .sidebar.collapsed .nav-group-label,
-.sidebar.collapsed .nav-label,
-.sidebar.collapsed .theme-label {
+.sidebar.collapsed .nav-label {
   opacity: 0;
   transition: opacity 0.12s;
   pointer-events: none;
@@ -209,27 +208,27 @@ body {
 .nav-link.active .nav-dot,
 .nav-link:hover .nav-dot { opacity: 1; }
 
-/* ── Sidebar footer / theme toggle ──────────────────────────────────────── */
-.sidebar-footer {
-  padding: 0.65rem;
-  border-top: 1px solid var(--border-sub);
-  flex-shrink: 0;
-}
-
+/* ── Theme toggle ────────────────────────────────────────────────────────── */
+/* Fixed to the viewport corner (not the sidebar), so collapsing or hiding
+   the sidebar on mobile never affects its visibility. */
 .theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1.25rem;
+  z-index: 70;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  width: 100%;
-  background: transparent;
+  background: var(--panel);
   border: 1px solid var(--border);
   color: var(--muted);
-  border-radius: 5px;
-  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
   cursor: pointer;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.74rem;
   white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   transition: color 0.15s, border-color 0.15s;
 }
 
@@ -526,12 +525,170 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
   margin-left: 0.25rem;
 }
 
+/* ── Fusion equation / chain (Fusion Finder) ─────────────────────────────── */
+.chain-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.fusion-chain { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.fusion-step {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+}
+
+.step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+/* Keep the "// comment" label motif used across the app. */
+.step-marker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-hi);
+}
+.step-marker::before { content: '// '; color: var(--muted); }
+
+.step-remove {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.step-remove:hover { color: var(--glitch); border-color: var(--glitch); }
+
+.fusion-equation {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.fusion-op {
+  flex-shrink: 0;
+  align-self: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  color: var(--muted);
+  user-select: none;
+}
+.fusion-op.arrow { color: var(--accent); }
+
+/* Material + result tiles reuse .card-slot; these size/interaction tweaks
+   compose on top of it. clamp() echoes the sequencer's outcome-card-img. */
+.mat-slot,
+.result-tile {
+  width: clamp(84px, 15vw, 132px);
+  flex-shrink: 0;
+}
+
+.mat-slot.editable { cursor: pointer; }
+
+/* Locked material (a carried result, or a still-disabled slot) and result
+   tiles are display-only — neutralize the interactive .card-slot:hover. */
+.mat-slot.locked,
+.result-tile {
+  cursor: default;
+}
+.mat-slot.locked:hover,
+.result-tile:hover {
+  border-color: var(--border);
+  background: var(--bg);
+}
+.mat-slot.awaiting { opacity: 0.45; }
+
+.result-tile.result-empty,
+.result-tile.result-nofusion { border-style: dashed; }
+.result-tile.result-empty .slot-placeholder { font-size: 1.6rem; }
+
+.result-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.result-block {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.result-caption { flex: 1; min-width: 0; }
+
+.result-caption h3 {
+  margin: 0 0 0.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.result-caption .meta {
+  margin: 0.15rem 0;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.77rem;
+}
+.result-caption .desc { margin: 0.35rem 0 0.7rem; font-size: 0.88rem; }
+
+.continued-label {
+  margin: 0.3rem 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--accent-hi);
+}
+
+.no-fusion-msg { margin: 0; color: var(--muted); font-size: 0.88rem; }
+
+.step-hint {
+  margin: 0.75rem 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  min-height: 1.1em;
+}
+
+/* One-shot fusion reveal — a restrained echo of the game's fusion flash. */
+@keyframes fusion-reveal {
+  0%   { transform: scale(0.94); box-shadow: 0 0 0 0 var(--accent-dim); border-color: var(--accent); }
+  55%  { box-shadow: 0 0 22px 5px var(--accent-dim); border-color: var(--accent-hi); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+}
+.result-tile.reveal { animation: fusion-reveal 0.32s ease-out; }
+
 /* ── Outcome card (Sequence Planner) ─────────────────────────────────────── */
-.outcome-card { display: flex; gap: 1rem; align-items: flex-start; }
+.outcome-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.1rem 1.35rem;
+}
 
 .outcome-card-img {
   flex-shrink: 0;
-  width: 72px;
+  /* Scales with the viewport the same way a .card-slot does, so the
+     fusion result reads as "one more card" next to the hand/field grid
+     instead of a small thumbnail. */
+  width: clamp(90px, 20vw, 150px);
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 5px;
@@ -829,6 +986,15 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
 
   /* Result cards: reclaim horizontal space. */
   .result-card { padding: 0.9rem 1rem; }
+
+  /* Fusion equation reflows to a vertical stack: A over + over B over → over
+     the result, so each card tile stays large on a narrow screen. */
+  .fusion-equation { flex-direction: column; align-items: center; gap: 0.55rem; }
+  .mat-slot,
+  .result-tile { width: clamp(130px, 48vw, 200px); }
+  .result-cell { width: 100%; }
+  .result-block { flex-direction: column; align-items: center; }
+  .result-caption { width: 100%; text-align: center; }
 }
 
 /* Very narrow phones (≤380px): drop the sequence slots to a calmer scale. */
@@ -841,4 +1007,5 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   .sidebar { transition: none; }
   .sidebar-scrim { transition: none; }
+  .result-tile.reveal { animation: none; }
 }

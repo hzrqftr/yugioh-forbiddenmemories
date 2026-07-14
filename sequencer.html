@@ -13,6 +13,10 @@
 </script>
 </head>
 <body>
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+  <span class="theme-icon" id="theme-icon">○</span>
+  <span class="theme-label" id="theme-label">light mode</span>
+</button>
 <div class="app-shell">
 
   <aside class="sidebar" id="sidebar">
@@ -45,13 +49,6 @@
         </div>
       </nav>
 
-      <div class="sidebar-footer">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
-          <span class="theme-icon" id="theme-icon">○</span>
-          <span class="theme-label" id="theme-label">light mode</span>
-        </button>
-      </div>
-
     </div>
   </aside>
 
@@ -73,11 +70,11 @@
       <form id="pool-form" class="panel" autocomplete="off">
         <div class="card-grid">
           <div class="grid-zone">
-            <div class="grid-label">hand</div>
+            <div class="grid-label">field</div>
             <div class="card-slots" id="hand-slots"></div>
           </div>
           <div class="grid-zone">
-            <div class="grid-label">field</div>
+            <div class="grid-label">hand</div>
             <div class="card-slots" id="field-slots"></div>
           </div>
         </div>
