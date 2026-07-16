@@ -1016,6 +1016,41 @@ main.library {
 
 .filter-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
 
+/* Single-line collection controls: search + type + sort + direction toggle */
+.toolbar-controls { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.toolbar-controls .library-search {
+  flex: 1 1 150px;
+  min-width: 110px;
+  max-width: 300px;
+  width: auto;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.82rem;
+}
+.toolbar-select {
+  flex-shrink: 0;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.sort-dir {
+  flex-shrink: 0;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.sort-dir:hover { color: var(--text); border-color: var(--accent); }
+
 .filter-chip {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
@@ -1378,11 +1413,24 @@ main.deckbuild {
 }
 .deck-tools-row { display: flex; gap: 0.4rem; }
 
-.sync-panel summary {
+/* Separator + collapsible manual-backup block below the sync panel */
+.tools-sep { border: none; border-top: 1px solid var(--border-sub); margin: 0.1rem 0; }
+.tools-note { font-size: 0.72rem; color: var(--muted); margin: 0.45rem 0; }
+
+/* Compact, evenly-sized buttons so two fit comfortably per row */
+.sync-row .secondary,
+.deck-tools-row .secondary {
+  flex: 1;
+  font-size: 0.76rem;
+  padding: 0.38rem 0.5rem;
+}
+
+.sync-panel summary,
+.tools-manual summary {
   cursor: pointer;
   margin: 0;
 }
-.sync-note { font-size: 0.74rem; color: var(--muted); margin: 0.5rem 0; }
+.sync-note { font-size: 0.72rem; color: var(--muted); margin: 0.45rem 0; }
 .sync-note code {
   font-family: 'JetBrains Mono', monospace;
   background: var(--panel-2);
@@ -1396,6 +1444,43 @@ main.deckbuild {
 
 /* Rows (shared by both panes) — align controls vertically centered */
 .deck-row { align-items: center; }
+
+/* Collection rows whose card is in the current deck: accent bar + faint wash */
+.deck-row.in-deck {
+  background: var(--accent-dim);
+  border-left-color: var(--accent);
+}
+.in-deck-tag,
+.in-trunk-tag {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+/* In the current deck — prominent accent pill */
+.in-deck-tag {
+  color: var(--accent-hi);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+}
+/* Owned but not in the deck — muted, secondary pill (no row highlight) */
+.in-trunk-tag {
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* Running copy number in the deck list (mirrors the in-game left column) */
+.row-seq {
+  flex-shrink: 0;
+  min-width: 1.6em;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  opacity: 0.7;
+}
 
 .qty-stepper { display: inline-flex; align-items: center; gap: 0.25rem; flex-shrink: 0; }
 .qty-btn {
@@ -1437,6 +1522,19 @@ main.deckbuild {
 
 /* ── Focus visible ───────────────────────────────────────────────────────── */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Subtle focus for text fields & dropdowns: a thin flush accent line instead of
+   the heavier offset ring. Applies site-wide to inputs, selects, and the sort
+   toggle (all the "clickable" fields), so clicking one doesn't glow. */
+input:focus, input:focus-visible,
+select:focus, select:focus-visible,
+textarea:focus, textarea:focus-visible,
+.sort-dir:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 0;
+  border-color: var(--accent);
+  box-shadow: none;
+}
 
 /* ── Mobile: sidebar becomes an off-canvas file drawer ───────────────────── */
 /* Scrim sits behind the drawer, dims + captures taps to dismiss.

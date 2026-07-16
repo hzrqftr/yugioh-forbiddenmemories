@@ -134,11 +134,15 @@ pattern — follow it.
   fusions this card enables) and "how to summon" (this card's own recipe), plus
   acquisition info. Uses `CAN_HOVER` to decide hover-tooltips vs tap.
 
-- **`deck-builder.js` (Deck Builder UI).** Two panes: collection (own 0–3 per card)
-  and the active deck (owned-aware, not enforced — flags "✓ owned" / "need N more"
-  / "not owned"). All state flows through `DeckStore`; the UI subscribes via
-  `DeckStore.onChange(renderAll)` and re-renders. `DECK_MIN = 40`. Also owns the
-  sync panel wiring (see §6).
+- **`deck-builder.js` (Deck Builder UI).** Two panes: collection (searchable,
+  type-filterable, and sortable by ID / name / ATK / DEF with an asc/desc toggle;
+  own 0–3 per card via a stepper) and the active deck. The deck pane lists **one row per copy**
+  (game-faithful — duplicates are not compiled into a count), each with a running
+  number and a `×` that removes that single copy; more copies are added via the
+  collection's `+deck`. Owned-awareness is per copy and not enforced: within a
+  card's copies the first N (N = owned) show "✓ owned", extras are flagged. All
+  state flows through `DeckStore`; the UI subscribes via `DeckStore.onChange(renderAll)`
+  and re-renders. `DECK_MIN = 40`. Also owns the sync panel wiring (see §6).
 
 ## 6. Persistence & sync (Deck Builder)
 
@@ -155,7 +159,9 @@ The single source of truth on-device. Pure data layer, **no DOM**. Keys:
 | `fm-sync-meta` | `{ lastPush?, lastPull? }` | sync timestamps |
 
 Other keys used site-wide by `ui.js`: `fm-theme` (`light`/`dark`),
-`fm-sidebar-collapsed` (`'1'`/`'0'`).
+`fm-sidebar-collapsed` (`'1'`/`'0'`). Additionally, `drive-sync.js` caches the
+access token in **`sessionStorage`** under `drivesync-token:<clientId>` — this is
+session-scoped (per tab, cleared on close), not persistent app state.
 
 `DeckStore` exposes collection CRUD, deck CRUD, `exportData()`/`importData(obj)`,
 and sync helpers. The **sync blob** shape (`getSyncBlob()`) is
@@ -183,8 +189,12 @@ Identity Services token flow — no client secret, nothing server-side).
   `appKey` + adding its origin to the OAuth client's authorized origins. No new
   Google project.
 - Flow: `init(clientId, appKey)` → `signIn()` (popup) → `push(blob)` / `pull()`.
-  Tokens are short-lived and kept in memory only. `deck-builder.js` wires the
-  buttons and reflects state in the status line.
+  Push/Pull are guarded by a `confirm()` (direction stated; extra warning when
+  pushing empty data over a populated Drive file). Tokens are short-lived; kept in
+  memory and cached in `sessionStorage` per tab (key `drivesync-token:<clientId>`)
+  so navigating between the app's pages doesn't re-prompt — the cache clears on tab
+  close and on `signOut()`. `deck-builder.js` wires the buttons and reflects state
+  in the status line.
 
 ## 7. Design system — `css/style.css`
 

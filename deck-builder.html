@@ -84,8 +84,12 @@
       <div class="collection-pane">
         <div class="library-toolbar">
           <p class="grid-label" id="collection-count">collection</p>
-          <input type="text" id="collection-search" class="library-search" placeholder="Search by name…" autocomplete="off" aria-label="Search cards by name">
-          <div class="filter-chips" id="collection-filters" role="group" aria-label="Filter by card type"></div>
+          <div class="toolbar-controls">
+            <input type="text" id="collection-search" class="library-search" placeholder="Search…" autocomplete="off" aria-label="Search cards by name">
+            <select id="collection-type" class="toolbar-select" aria-label="Filter by card type"></select>
+            <select id="collection-sort" class="toolbar-select" aria-label="Sort cards by"></select>
+            <button type="button" class="sort-dir" id="collection-sort-dir" aria-label="Sort ascending" title="Toggle ascending / descending">↑</button>
+          </div>
         </div>
         <ul class="library-list" id="collection-list" aria-label="Card collection"></ul>
       </div>
@@ -105,23 +109,30 @@
         <ul class="deck-list" id="deck-list" aria-label="Cards in deck"></ul>
 
         <div class="deck-tools">
-          <div class="deck-tools-row">
-            <button type="button" class="secondary" id="deck-export">Export</button>
-            <button type="button" class="secondary" id="deck-import-btn">Import</button>
-            <input type="file" id="deck-import" accept="application/json,.json" hidden>
-          </div>
-          <details class="sync-panel">
+          <details class="sync-panel" open>
             <summary class="grid-label">google drive sync</summary>
-            <p class="sync-note">Sign in with Google to sync your collection &amp; decks across devices via a private file in a hidden app folder in your Drive. No server, nothing stored publicly.</p>
-            <div class="sync-row">
+            <p class="sync-note">Sync across devices via a private file in your own Google Drive — nothing stored publicly.</p>
+            <div class="sync-row sync-auth">
               <button type="button" class="secondary" id="sync-signin">Sign in with Google</button>
               <button type="button" class="secondary" id="sync-signout" hidden>Sign out</button>
             </div>
             <div class="sync-row">
-              <button type="button" class="secondary" id="sync-push" disabled>Push ↑</button>
-              <button type="button" class="secondary" id="sync-pull" disabled>Pull ↓</button>
+              <button type="button" class="secondary" id="sync-push" disabled title="Overwrite the copy in your Google Drive with the data on this device">Push to Drive</button>
+              <button type="button" class="secondary" id="sync-pull" disabled title="Overwrite the data on this device with the copy from your Google Drive">Pull from Drive</button>
             </div>
             <p class="sync-status" id="sync-status"></p>
+          </details>
+
+          <hr class="tools-sep">
+
+          <details class="tools-manual">
+            <summary class="grid-label">manual backup</summary>
+            <p class="tools-note">Export saves your collection &amp; decks to a JSON file; Import loads one back (or moves it to another browser).</p>
+            <div class="deck-tools-row">
+              <button type="button" class="secondary" id="deck-export">Export</button>
+              <button type="button" class="secondary" id="deck-import-btn">Import</button>
+              <input type="file" id="deck-import" accept="application/json,.json" hidden>
+            </div>
           </details>
         </div>
       </div>

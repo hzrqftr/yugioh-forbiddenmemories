@@ -33,6 +33,7 @@ const DeckStore = (() => {
     emit();
   }
   const ownedCount = () => Object.keys(getCollection()).length;
+  const ownedTotal = () => Object.values(getCollection()).reduce((a, b) => a + b, 0);
 
   /* ── Decks: [ { id, name, cards:{cardId:count}, updatedAt } ] ─────────── */
   const getDecks = () => read(KEYS.decks, []);
@@ -99,7 +100,7 @@ const DeckStore = (() => {
 
   return {
     MAX_COPIES, onChange,
-    getCollection, getOwned, setOwned, ownedCount,
+    getCollection, getOwned, setOwned, ownedCount, ownedTotal,
     getDecks, getActiveDeckId, setActiveDeckId, getActiveDeck,
     createDeck, renameDeck, deleteDeck, setDeckCard, deckTotal, ensureDeck,
     exportData, importData,

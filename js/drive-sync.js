@@ -13,6 +13,9 @@
 //   5. Add the app's origin to the umbrella OAuth client's Authorized JS origins.
 // The Client ID is public/safe to commit; appDataFolder is scoped per OAuth client,
 // so all apps reusing one client share a hidden folder, separated by filename.
+// The short-lived access token is cached in sessionStorage (per tab) so navigating
+// between the app's pages doesn't force a fresh sign-in; it clears when the tab
+// closes and on signOut(). No refresh token / secret is ever stored.
 const DriveSync = (() => {
   const SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
 
@@ -24,6 +27,25 @@ const DriveSync = (() => {
   let cachedFileId = null;    // Drive file id for this session
 
   const configured = () => !!clientId && !clientId.startsWith('<') && !!fileName;
+
+  // ── Token cache (sessionStorage, keyed per client so reused clients don't clash)
+  const tokenKey = () => 'drivesync-token:' + clientId;
+  function persistToken() {
+    try { sessionStorage.setItem(tokenKey(), JSON.stringify({ accessToken, tokenExpiry })); } catch { /* ignore */ }
+  }
+  function restoreToken() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(tokenKey()) || 'null');
+      if (saved && saved.accessToken && Date.now() < saved.tokenExpiry) {
+        accessToken = saved.accessToken;
+        tokenExpiry = saved.tokenExpiry;
+      }
+    } catch { /* ignore */ }
+  }
+  function clearToken() {
+    accessToken = null; tokenExpiry = 0; cachedFileId = null;
+    try { sessionStorage.removeItem(tokenKey()); } catch { /* ignore */ }
+  }
 
   // Resolve once the GIS script global is present (loaded async in the page).
   function waitForGis(timeoutMs = 8000) {
@@ -41,6 +63,7 @@ const DriveSync = (() => {
     clientId = id || '';
     fileName = appKey ? `${appKey}.json` : '';
     if (!configured()) return false;
+    restoreToken(); // reuse a still-valid token from this tab session (no popup)
     await waitForGis();
     tokenClient = window.google.accounts.oauth2.initTokenClient({
       client_id: clientId,
@@ -56,12 +79,14 @@ const DriveSync = (() => {
   // prior consent exist; otherwise GIS shows the popup.
   function getToken({ interactive } = {}) {
     return new Promise((resolve, reject) => {
-      if (!tokenClient) return reject(new Error('Sync not configured'));
+      // A restored/cached token works even if GIS hasn't finished loading.
       if (isSignedIn()) return resolve(accessToken);
+      if (!tokenClient) return reject(new Error('Sync not configured'));
       tokenClient.callback = (resp) => {
         if (resp.error) return reject(new Error(resp.error));
         accessToken = resp.access_token;
         tokenExpiry = Date.now() + ((resp.expires_in || 3600) - 60) * 1000;
+        persistToken();
         resolve(accessToken);
       };
       tokenClient.requestAccessToken({ prompt: interactive ? 'consent' : '' });
@@ -73,13 +98,13 @@ const DriveSync = (() => {
     if (accessToken && window.google?.accounts?.oauth2) {
       try { window.google.accounts.oauth2.revoke(accessToken); } catch { /* ignore */ }
     }
-    accessToken = null; tokenExpiry = 0; cachedFileId = null;
+    clearToken();
   }
 
   async function api(url, opts = {}) {
     const token = await getToken();
     const res = await fetch(url, { ...opts, headers: { Authorization: 'Bearer ' + token, ...(opts.headers || {}) } });
-    if (res.status === 401) { accessToken = null; tokenExpiry = 0; throw new Error('Session expired — sign in again'); }
+    if (res.status === 401) { clearToken(); throw new Error('Session expired — sign in again'); }
     if (!res.ok) throw new Error(`Drive error ${res.status}`);
     return res;
   }
