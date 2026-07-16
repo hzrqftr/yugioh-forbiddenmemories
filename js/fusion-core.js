@@ -35,6 +35,8 @@ async function loadCards() {
       level: row[header.indexOf('Level')],
       atk: row[header.indexOf('ATK')],
       def: row[header.indexOf('DFD')],
+      password: row[header.indexOf('Password')],
+      scCost: row[header.indexOf('SC Cost')],
     };
     state.cardsById.set(card.id, card);
   }

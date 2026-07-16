@@ -7,6 +7,23 @@ let pickerSearchEl = null;
 let pickerListEl = null;
 let pickerActiveItemIndex = -1;
 
+// Pointer-based drag to move/swap cards between slots (desktop + touch).
+const DRAG_THRESHOLD = 5;       // px of movement before a mouse drag begins
+const TOUCH_MOVE_CANCEL = 10;   // px of movement that cancels a pending long-press (= scroll)
+const LONG_PRESS_MS = 350;      // touch hold before a drag lifts
+const drag = {
+  pointerId: null,
+  sourceIndex: -1,
+  startX: 0, startY: 0,
+  lastX: 0, lastY: 0,
+  isTouch: false,
+  armed: false,   // pressed on a filled slot, drag not yet started
+  active: false,  // drag in progress
+  didDrag: false, // set on drop so the trailing click doesn't reopen the picker
+  ghost: null,
+  longPressTimer: null,
+};
+
 init();
 
 async function init() {
@@ -72,7 +89,7 @@ function initSlots() {
     slotEl.dataset.zone = zone;
     slotEl.innerHTML = `
       <div class="slot-placeholder">+</div>
-      <img class="slot-img" alt="" hidden>
+      <img class="slot-img" alt="" draggable="false" hidden>
       <button type="button" class="slot-clear-btn" aria-label="Clear card" hidden>&times;</button>
     `;
 
@@ -81,6 +98,7 @@ function initSlots() {
 
     slotEl.addEventListener('click', (e) => {
       if (e.target.closest('.slot-clear-btn')) return;
+      if (drag.didDrag) { drag.didDrag = false; return; } // swallow the click after a drag
       openPicker(slotIndex);
     });
 
@@ -88,6 +106,8 @@ function initSlots() {
       e.stopPropagation();
       clearSlot(slotIndex);
     });
+
+    slotEl.addEventListener('pointerdown', (e) => onSlotPointerDown(e, slotIndex));
   }
 }
 
@@ -167,50 +187,202 @@ function updatePickerActiveItem(items) {
   if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
 }
 
-function selectCard(slotIndex, cardId) {
-  if (slotIndex < 0 || slotIndex >= slotStates.length) return;
+// Low-level: render a slot purely from a cardId (null = empty). No side effects
+// beyond the slot's own DOM — shared by pick, clear, and drag move/swap.
+function setSlotCard(slotIndex, cardId) {
   const slot = slotStates[slotIndex];
-  slot.cardId = cardId;
+  slot.cardId = cardId || null;
 
   const imgEl = slot.el.querySelector('.slot-img');
   const placeholderEl = slot.el.querySelector('.slot-placeholder');
   const clearBtnEl = slot.el.querySelector('.slot-clear-btn');
 
-  const imageData = state.cardImagesById.get(cardId);
-  if (imageData?.localPath) {
-    imgEl.src = imageData.localPath;
-    imgEl.alt = state.cardsById.get(cardId)?.name || '';
-    imgEl.hidden = false;
-    placeholderEl.hidden = true;
+  if (slot.cardId) {
+    const imageData = state.cardImagesById.get(slot.cardId);
+    if (imageData?.localPath) {
+      imgEl.src = imageData.localPath;
+      imgEl.alt = state.cardsById.get(slot.cardId)?.name || '';
+      imgEl.hidden = false;
+      placeholderEl.hidden = true;
+      placeholderEl.classList.remove('filled-label');
+    } else {
+      imgEl.hidden = true;
+      imgEl.removeAttribute('src');
+      placeholderEl.textContent = state.cardsById.get(slot.cardId)?.name || slot.cardId;
+      placeholderEl.classList.add('filled-label');
+      placeholderEl.hidden = false;
+    }
+    clearBtnEl.hidden = false;
+    slot.el.classList.add('filled');
   } else {
     imgEl.hidden = true;
-    placeholderEl.textContent = state.cardsById.get(cardId)?.name || cardId;
-    placeholderEl.classList.add('filled-label');
+    imgEl.removeAttribute('src');
+    placeholderEl.textContent = '+';
+    placeholderEl.classList.remove('filled-label');
     placeholderEl.hidden = false;
+    clearBtnEl.hidden = true;
+    slot.el.classList.remove('filled');
   }
+}
 
-  clearBtnEl.hidden = false;
-  slot.el.classList.add('filled');
+function selectCard(slotIndex, cardId) {
+  if (slotIndex < 0 || slotIndex >= slotStates.length) return;
+  setSlotCard(slotIndex, cardId);
   closePicker();
   clearSequenceResults();
 }
 
 function clearSlot(slotIndex) {
-  const slot = slotStates[slotIndex];
-  slot.cardId = null;
-
-  const imgEl = slot.el.querySelector('.slot-img');
-  const placeholderEl = slot.el.querySelector('.slot-placeholder');
-  const clearBtnEl = slot.el.querySelector('.slot-clear-btn');
-
-  imgEl.hidden = true;
-  imgEl.src = '';
-  placeholderEl.textContent = '+';
-  placeholderEl.classList.remove('filled-label');
-  placeholderEl.hidden = false;
-  clearBtnEl.hidden = true;
-  slot.el.classList.remove('filled');
+  setSlotCard(slotIndex, null);
   clearSequenceResults();
+}
+
+// Move (to empty) or swap (with filled) the card from one slot into another.
+function moveCard(from, to) {
+  if (from === to) return;
+  const a = slotStates[from].cardId;
+  const b = slotStates[to].cardId;
+  if (a == null) return;
+  setSlotCard(to, a);
+  setSlotCard(from, b); // b is null → move; otherwise → swap
+  clearSequenceResults();
+}
+
+/* ── Pointer drag engine (desktop click-drag + touch long-press) ──────────── */
+
+function onSlotPointerDown(e, slotIndex) {
+  if (e.button != null && e.button > 0) return;            // ignore non-primary buttons
+  if (e.target.closest('.slot-clear-btn')) return;         // clear button isn't a drag handle
+  if (slotStates[slotIndex].cardId == null) return;        // only filled slots are draggable
+  if (drag.armed || drag.active) return;
+
+  drag.pointerId = e.pointerId;
+  drag.sourceIndex = slotIndex;
+  drag.startX = drag.lastX = e.clientX;
+  drag.startY = drag.lastY = e.clientY;
+  drag.isTouch = e.pointerType === 'touch';
+  drag.armed = true;
+  drag.active = false;
+
+  window.addEventListener('pointermove', onDragMove, { passive: false });
+  window.addEventListener('pointerup', onDragEnd);
+  window.addEventListener('pointercancel', onDragCancel);
+  window.addEventListener('keydown', onDragKey);
+
+  if (drag.isTouch) {
+    drag.longPressTimer = setTimeout(() => {
+      drag.longPressTimer = null;
+      if (drag.armed && !drag.active) beginDrag();
+    }, LONG_PRESS_MS);
+  }
+}
+
+function onDragMove(e) {
+  if (e.pointerId !== drag.pointerId) return;
+  drag.lastX = e.clientX;
+  drag.lastY = e.clientY;
+
+  if (!drag.active) {
+    const dist = Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY);
+    if (drag.isTouch) {
+      // Moved before the hold completed → user is scrolling, not dragging.
+      if (drag.longPressTimer && dist > TOUCH_MOVE_CANCEL) cancelArming();
+      return;
+    }
+    if (dist > DRAG_THRESHOLD) beginDrag();
+    else return;
+  }
+
+  e.preventDefault(); // stop touch scroll / text selection during an active drag
+  positionGhost(e.clientX, e.clientY);
+  highlightDropTarget(e.clientX, e.clientY);
+}
+
+function beginDrag() {
+  drag.active = true;
+  drag.didDrag = false;
+  closePicker();
+
+  const srcEl = slotStates[drag.sourceIndex].el;
+  try { srcEl.setPointerCapture(drag.pointerId); } catch { /* ignore */ }
+  srcEl.classList.add('dragging');
+  document.body.classList.add('slot-dragging');
+
+  const cardId = slotStates[drag.sourceIndex].cardId;
+  const img = state.cardImagesById.get(cardId);
+  drag.ghost = document.createElement('div');
+  drag.ghost.className = 'slot-drag-ghost';
+  drag.ghost.innerHTML = img?.localPath
+    ? `<img src="${img.localPath}" alt="">`
+    : `<span>${escapeHtml(state.cardsById.get(cardId)?.name || cardId)}</span>`;
+  document.body.appendChild(drag.ghost);
+
+  positionGhost(drag.lastX, drag.lastY);
+  highlightDropTarget(drag.lastX, drag.lastY);
+}
+
+function positionGhost(x, y) {
+  if (!drag.ghost) return;
+  drag.ghost.style.left = x + 'px';
+  drag.ghost.style.top = y + 'px';
+}
+
+function targetSlotAt(x, y) {
+  const el = document.elementFromPoint(x, y);
+  const slotEl = el && el.closest ? el.closest('.card-slot') : null;
+  if (!slotEl || slotEl.dataset.index === undefined) return -1;
+  return Number(slotEl.dataset.index);
+}
+
+function highlightDropTarget(x, y) {
+  const idx = targetSlotAt(x, y);
+  slotStates.forEach((s, i) => {
+    s.el.classList.toggle('drop-target', i === idx && i !== drag.sourceIndex);
+  });
+}
+
+function onDragEnd(e) {
+  if (e.pointerId !== drag.pointerId) return;
+  const wasActive = drag.active;
+  const src = drag.sourceIndex;
+  const target = wasActive ? targetSlotAt(e.clientX, e.clientY) : -1;
+  teardownDrag();
+  if (wasActive) {
+    drag.didDrag = true; // suppress the click that follows this pointerup
+    if (target >= 0 && target !== src) moveCard(src, target);
+  }
+}
+
+function onDragCancel(e) {
+  if (e.pointerId !== drag.pointerId) return;
+  teardownDrag();
+}
+
+function onDragKey(e) {
+  if (e.key === 'Escape' && (drag.armed || drag.active)) teardownDrag();
+}
+
+function cancelArming() {
+  teardownDrag();
+}
+
+function teardownDrag() {
+  window.removeEventListener('pointermove', onDragMove);
+  window.removeEventListener('pointerup', onDragEnd);
+  window.removeEventListener('pointercancel', onDragCancel);
+  window.removeEventListener('keydown', onDragKey);
+  if (drag.longPressTimer) { clearTimeout(drag.longPressTimer); drag.longPressTimer = null; }
+  if (drag.pointerId != null && drag.sourceIndex >= 0) {
+    try { slotStates[drag.sourceIndex].el.releasePointerCapture(drag.pointerId); } catch { /* ignore */ }
+  }
+  if (drag.ghost) { drag.ghost.remove(); drag.ghost = null; }
+  slotStates.forEach((s) => s.el.classList.remove('dragging', 'drop-target'));
+  document.body.classList.remove('slot-dragging');
+  drag.active = false;
+  drag.armed = false;
+  drag.sourceIndex = -1;
+  drag.pointerId = null;
+  drag.isTouch = false;
 }
 
 function getPool() {

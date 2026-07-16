@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="icon" type="image/svg+xml" href="images/millennium-eye.svg">
 <script>
   (function(){var t=localStorage.getItem('fm-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
 </script>
@@ -24,7 +25,7 @@
 
       <div class="sidebar-header">
         <div class="sidebar-brand">
-          <div class="brand-sigil">FM</div>
+          <div class="brand-sigil"><img src="images/millennium-eye.svg" alt="Millennium Eye"></div>
           <span class="brand-name">fm-tools</span>
         </div>
       </div>
@@ -43,6 +44,12 @@
               <a href="sequencer.html" class="nav-link">
                 <span class="nav-dot"></span>
                 <span class="nav-label">sequence-planner.js</span>
+              </a>
+            </li>
+            <li>
+              <a href="card-library.html" class="nav-link">
+                <span class="nav-dot"></span>
+                <span class="nav-label">card-library.js</span>
               </a>
             </li>
           </ul>
@@ -77,15 +84,25 @@
 
     <footer>
       <p>
-        Card data adapted from
+        Card data from
         <a href="https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions" target="_blank" rel="noopener">Yugipedia</a>
-        (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC&nbsp;BY-SA&nbsp;4.0</a>).
-        Card images from the
-        <a href="https://yugioh.fandom.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_cards" target="_blank" rel="noopener">Yu-Gi-Oh! Fandom wiki</a>.
-        Yu-Gi-Oh! and all card artwork are © Konami, used here under fair use for a non-commercial fan tool.
-        Unofficial — not affiliated with or endorsed by Konami.
-        Full attribution in <a href="NOTICE.md" target="_blank" rel="noopener">NOTICE</a>.
+        (CC&nbsp;BY-SA&nbsp;4.0) · card art © Konami, used under fair use. Unofficial fan tool,
+        not affiliated with Konami. Full attribution &amp; licensing in <a href="notice.html">NOTICE</a>.
       </p>
+      <a class="footer-badge" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener license" aria-label="Creative Commons Attribution-ShareAlike 4.0 International">
+        <svg viewBox="0 0 82 26" role="img" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1.4">
+            <circle cx="13" cy="13" r="12"/>
+            <circle cx="41" cy="13" r="12"/>
+            <circle cx="69" cy="13" r="12"/>
+          </g>
+          <text x="13" y="17.2" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="currentColor">CC</text>
+          <circle cx="41" cy="8.6" r="2.7" fill="currentColor"/>
+          <path d="M35.5 20 c0-4.2 2.5-7.2 5.5-7.2 s5.5 3 5.5 7.2 z" fill="currentColor"/>
+          <path d="M69 5.2 a7.8 7.8 0 1 0 7.4 5.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M66 5.6 l3.4 -2 l0 4.2 z" fill="currentColor"/>
+        </svg>
+      </a>
     </footer>
 
   </div>
