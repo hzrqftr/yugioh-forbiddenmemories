@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forbidden Memories — Notice & Attribution</title>
+<title>Forbidden Memories — Deck Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   (function(){var t=localStorage.getItem('fm-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
 </script>
 </head>
-<body>
+<body class="deck-builder-page">
 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
   <span class="theme-icon" id="theme-icon">○</span>
   <span class="theme-label" id="theme-label">light mode</span>
@@ -53,7 +53,7 @@
               </a>
             </li>
             <li>
-              <a href="deck-builder.html" class="nav-link">
+              <a href="deck-builder.html" class="nav-link active" aria-current="page">
                 <span class="nav-dot"></span>
                 <span class="nav-label">deck-builder.js</span>
               </a>
@@ -70,70 +70,60 @@
     <header>
       <div class="header-row">
         <button class="sidebar-hamburger" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
-        <p class="page-path">~/fm-tools<span class="path-sep">/</span><span class="path-active">notice</span></p>
+        <p class="page-path">~/fm-tools<span class="path-sep">/</span><span class="path-active">deck-builder</span></p>
       </div>
-      <h1>Notice &amp; Attribution</h1>
-      <p class="subtitle">Licensing, credits, and takedown contact for this fan-made tool.</p>
+      <h1>Deck Builder</h1>
+      <p class="subtitle">
+        Track the cards you own and build decks from them. Everything saves in your browser;
+        export a backup or sync across devices with your Google account.
+      </p>
     </header>
 
-    <main>
-      <div class="notice-content">
-        <p>
-          This is an <strong>unofficial, non-commercial, fan-made</strong> reference tool for the
-          video game <em>Yu-Gi-Oh! Forbidden Memories</em>. It is not affiliated with, sponsored
-          by, or endorsed by Konami. No revenue is generated from this project.
-        </p>
+    <main class="deckbuild">
+      <!-- Left: collection / trunk -->
+      <div class="collection-pane">
+        <div class="library-toolbar">
+          <p class="grid-label" id="collection-count">collection</p>
+          <input type="text" id="collection-search" class="library-search" placeholder="Search by name…" autocomplete="off" aria-label="Search cards by name">
+          <div class="filter-chips" id="collection-filters" role="group" aria-label="Filter by card type"></div>
+        </div>
+        <ul class="library-list" id="collection-list" aria-label="Card collection"></ul>
+      </div>
 
-        <h2>Trademarks &amp; artwork — © Konami</h2>
-        <p>
-          <em>Yu-Gi-Oh!</em>, <em>Forbidden Memories</em>, the card names, and all card artwork
-          are trademarks and/or copyright of <strong>Konami Digital Entertainment Co., Ltd.</strong>
-          and its licensors. They appear here only for identification and reference. No ownership
-          of any Konami intellectual property is claimed.
-        </p>
+      <!-- Right: deck -->
+      <div class="deck-pane">
+        <div class="deck-head">
+          <div class="deck-select-row">
+            <select id="deck-select" aria-label="Active deck"></select>
+            <button type="button" class="secondary" id="deck-new" title="New deck">+ New</button>
+            <button type="button" class="secondary" id="deck-rename" title="Rename deck">Rename</button>
+            <button type="button" class="secondary" id="deck-delete" title="Delete deck">Delete</button>
+          </div>
+          <div class="deck-meter" id="deck-meter"></div>
+        </div>
 
-        <h2>Card &amp; fusion data — Yugipedia (CC BY-SA 4.0)</h2>
-        <p>
-          The card catalogue and fusion data in <code>data/</code> are adapted from
-          <a href="https://yugipedia.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_Fusions" target="_blank" rel="noopener">Yugipedia</a>,
-          whose text is licensed under the
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener license">Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)</a>.
-        </p>
-        <p>
-          In accordance with that license's <em>ShareAlike</em> term, the data files in
-          <code>data/</code> — the card catalogue, the fusion rules, and the derived
-          <code>card_images.json</code> manifest — are made available under the <strong>same
-          license, CC BY-SA 4.0</strong>, with attribution to Yugipedia and its contributors.
-        </p>
+        <ul class="deck-list" id="deck-list" aria-label="Cards in deck"></ul>
 
-        <h2>Card images — Yu-Gi-Oh! Fandom wiki (not freely licensed)</h2>
-        <p>
-          The card images in <code>images/</code> were retrieved from the
-          <a href="https://yugioh.fandom.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_cards" target="_blank" rel="noopener">Yu-Gi-Oh! Fandom wiki</a>
-          via its MediaWiki API. Fandom's CC BY-SA license covers wiki <strong>text only</strong>;
-          image files are <strong>not</strong> freely licensed. The underlying artwork is © Konami
-          and is included here under a good-faith <strong>fair-use</strong> claim for
-          identification and reference in a non-commercial fan tool. Fandom itself hosts these
-          images under its own fair-use claim and cannot sublicense them.
-        </p>
-
-        <h2>Source code</h2>
-        <p>
-          The application source code (HTML, CSS, and JavaScript) is original work by the project
-          maintainer and is licensed under the <strong>MIT License</strong>.
-        </p>
-        <p>
-          This license covers <strong>only the original code</strong>. It does <em>not</em> apply
-          to the card data (CC BY-SA 4.0) or the card artwork (© Konami).
-        </p>
-
-        <h2>Takedown / rights-holder contact</h2>
-        <p>
-          If you are a rights holder and believe any content here should be removed, please
-          contact the maintainer at
-          <a href="mailto:hazriq.fitri95@gmail.com">hazriq.fitri95@gmail.com</a>
-          and it will be taken down promptly.
-        </p>
+        <div class="deck-tools">
+          <div class="deck-tools-row">
+            <button type="button" class="secondary" id="deck-export">Export</button>
+            <button type="button" class="secondary" id="deck-import-btn">Import</button>
+            <input type="file" id="deck-import" accept="application/json,.json" hidden>
+          </div>
+          <details class="sync-panel">
+            <summary class="grid-label">google drive sync</summary>
+            <p class="sync-note">Sign in with Google to sync your collection &amp; decks across devices via a private file in a hidden app folder in your Drive. No server, nothing stored publicly.</p>
+            <div class="sync-row">
+              <button type="button" class="secondary" id="sync-signin">Sign in with Google</button>
+              <button type="button" class="secondary" id="sync-signout" hidden>Sign out</button>
+            </div>
+            <div class="sync-row">
+              <button type="button" class="secondary" id="sync-push" disabled>Push ↑</button>
+              <button type="button" class="secondary" id="sync-pull" disabled>Pull ↓</button>
+            </div>
+            <p class="sync-status" id="sync-status"></p>
+          </details>
+        </div>
       </div>
     </main>
 
@@ -163,6 +153,12 @@
   </div>
 </div>
 
+<script src="https://accounts.google.com/gsi/client" async></script>
+<script src="js/fusion-core.js"></script>
 <script src="js/ui.js"></script>
+<script src="js/config.js"></script>
+<script src="js/deck-store.js"></script>
+<script src="js/drive-sync.js"></script>
+<script src="js/deck-builder.js"></script>
 </body>
 </html>

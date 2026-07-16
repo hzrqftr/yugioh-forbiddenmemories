@@ -1309,6 +1309,132 @@ main.library {
 .notice-content a { color: var(--accent); text-decoration: none; }
 .notice-content a:hover { text-decoration: underline; }
 
+/* ── Deck Builder (split: collection | deck) ─────────────────────────────── */
+.deck-builder-page .main-area { height: 100vh; overflow: hidden; }
+
+main.deckbuild {
+  max-width: none;
+  padding: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+}
+
+.collection-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--border-sub);
+}
+
+.deck-pane { display: flex; flex-direction: column; min-height: 0; }
+
+.deck-head {
+  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-sub);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.deck-select-row { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+
+#deck-select {
+  flex: 1;
+  min-width: 130px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.deck-meter { display: flex; align-items: baseline; gap: 0.6rem; font-family: 'JetBrains Mono', monospace; }
+.deck-meter .meter-count { font-size: 1.15rem; font-weight: 600; color: var(--muted); }
+.deck-meter.ok .meter-count { color: var(--accent-hi); }
+.deck-meter .meter-note { font-size: 0.72rem; color: var(--muted); }
+.deck-meter.ok .meter-note { color: var(--accent-hi); }
+
+.deck-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+}
+
+.deck-tools {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border-sub);
+  padding: 0.8rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.deck-tools-row { display: flex; gap: 0.4rem; }
+
+.sync-panel summary {
+  cursor: pointer;
+  margin: 0;
+}
+.sync-note { font-size: 0.74rem; color: var(--muted); margin: 0.5rem 0; }
+.sync-note code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--panel-2);
+  color: var(--accent-hi);
+  padding: 0.02rem 0.28rem;
+  border-radius: 4px;
+}
+.sync-row { display: flex; gap: 0.4rem; margin: 0.35rem 0; }
+.sync-row .library-search { margin: 0; }
+.sync-status { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); margin: 0.3rem 0 0; min-height: 1em; }
+
+/* Rows (shared by both panes) — align controls vertically centered */
+.deck-row { align-items: center; }
+
+.qty-stepper { display: inline-flex; align-items: center; gap: 0.25rem; flex-shrink: 0; }
+.qty-btn {
+  width: 20px; height: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0;
+}
+.qty-btn:hover:not(:disabled) { color: var(--text); border-color: var(--accent); }
+.qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.qty-val { min-width: 1.1em; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+.qty-val.has { color: var(--accent-hi); }
+
+.add-deck-btn {
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  padding: 0.18rem 0.4rem;
+  cursor: pointer;
+}
+.add-deck-btn:hover { color: var(--accent-hi); border-color: var(--accent); }
+
+.del-btn { flex-shrink: 0; border: none; background: transparent; color: var(--muted); font-size: 1.05rem; line-height: 1; cursor: pointer; padding: 0 0.15rem; }
+.del-btn:hover { color: var(--glitch); }
+
+.own-flag { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; padding: 0.05rem 0.4rem; border-radius: 999px; }
+.own-flag.ok { color: var(--muted); }
+.own-flag.warn { color: var(--glitch); background: rgba(224, 92, 92, 0.12); }
+
 /* ── Focus visible ───────────────────────────────────────────────────────── */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -1414,6 +1540,12 @@ main.library {
   .library-list-pane { border-right: none; border-bottom: 1px solid var(--border-sub); }
   .library-list { max-height: 45vh; }
   .detail-hero { gap: 1rem; }
+
+  /* Deck Builder: same treatment — unlock height, stack collection over deck. */
+  .deck-builder-page .main-area { height: auto; overflow: visible; }
+  main.deckbuild { display: block; }
+  .collection-pane { border-right: none; border-bottom: 1px solid var(--border-sub); }
+  .collection-pane .library-list { max-height: 42vh; }
 }
 
 /* Very narrow phones (≤380px): drop the sequence slots to a calmer scale. */
