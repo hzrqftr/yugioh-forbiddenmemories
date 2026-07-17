@@ -31,6 +31,17 @@ const placement = { active: false, slots: [], resultId: null, resultName: '' };
 const undoStack = [];
 let bannerEl = null;
 
+function compactHandSlots() {
+  const handCards = slotStates
+    .slice(0, 5)
+    .map((slot) => slot.cardId)
+    .filter((cardId) => cardId !== null);
+
+  for (let i = 0; i < 5; i += 1) {
+    setSlotCard(i, handCards[i] || null);
+  }
+}
+
 init();
 
 async function init() {
@@ -161,7 +172,9 @@ function closePicker() {
 }
 
 function renderPickerList() {
-  const options = filterOptions(state.monsterOptions, pickerSearchEl.value);
+  const searchText = pickerSearchEl.value.trim();
+  const options = filterOptions(state.monsterOptions, searchText);
+
   pickerActiveItemIndex = options.length ? 0 : -1;
 
   if (options.length === 0) {
@@ -248,6 +261,7 @@ function selectCard(slotIndex, cardId) {
 
 function clearSlot(slotIndex) {
   setSlotCard(slotIndex, null);
+  if (slotStates[slotIndex].zone === 'hand') compactHandSlots();
   clearSequenceResults();
 }
 
@@ -464,6 +478,7 @@ function commitPlacement(dest) {
   placement.slots.forEach((i) => { if (i !== dest) setSlotCard(i, null); }); // consume materials
   setSlotCard(dest, placement.resultId);                                     // drop the result
   endPlacement();
+  compactHandSlots();
   runSearch(true); // re-scan so the new board's fusions show
 }
 
