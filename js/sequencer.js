@@ -24,6 +24,13 @@ const drag = {
   longPressTimer: null,
 };
 
+// Interactive "apply fusion": pick a listed fusion, then click a slot to drop its
+// result into (consuming the materials). placement is the pending choice awaiting
+// a destination click; undoStack snapshots the board before each destructive op.
+const placement = { active: false, slots: [], resultId: null, resultName: '' };
+const undoStack = [];
+let bannerEl = null;
+
 init();
 
 async function init() {
@@ -36,10 +43,16 @@ async function init() {
   }
 
   createPickerElement();
+  createPlacementBanner();
   initSlots();
 
   document.getElementById('pool-form').addEventListener('submit', onPoolSubmit);
   document.getElementById('seq-include-glitch').addEventListener('change', clearSequenceResults);
+  document.getElementById('sequence-results').addEventListener('click', onResultsClick);
+  document.getElementById('seq-undo').addEventListener('click', undo);
+  document.getElementById('seq-reset').addEventListener('click', resetBoard);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && placement.active) cancelPlacement(); });
+  updateUndoButton();
 }
 
 function createPickerElement() {
@@ -99,6 +112,7 @@ function initSlots() {
     slotEl.addEventListener('click', (e) => {
       if (e.target.closest('.slot-clear-btn')) return;
       if (drag.didDrag) { drag.didDrag = false; return; } // swallow the click after a drag
+      if (placement.active) { commitPlacement(slotIndex); return; } // placing a fused result
       openPicker(slotIndex);
     });
 
@@ -251,6 +265,7 @@ function moveCard(from, to) {
 /* ── Pointer drag engine (desktop click-drag + touch long-press) ──────────── */
 
 function onSlotPointerDown(e, slotIndex) {
+  if (placement.active) return;                            // no dragging while placing a result
   if (e.button != null && e.button > 0) return;            // ignore non-primary buttons
   if (e.target.closest('.slot-clear-btn')) return;         // clear button isn't a drag handle
   if (slotStates[slotIndex].cardId == null) return;        // only filled slots are draggable
@@ -388,7 +403,7 @@ function teardownDrag() {
 function getPool() {
   return slotStates
     .filter((s) => s.cardId !== null)
-    .map((s) => ({ id: s.cardId, name: state.cardsById.get(s.cardId).name }));
+    .map((s) => ({ id: s.cardId, name: state.cardsById.get(s.cardId).name, slotIndex: s.index }));
 }
 
 function clearSequenceResults() {
@@ -397,17 +412,111 @@ function clearSequenceResults() {
 
 function onPoolSubmit(event) {
   event.preventDefault();
+  runSearch(false);
+}
+
+// quiet: when re-scanning after a fusion/undo/reset, don't nag with the
+// "add at least two" error if the board is now too small — just clear results.
+function runSearch(quiet) {
   const results = document.getElementById('sequence-results');
   const includeGlitch = document.getElementById('seq-include-glitch').checked;
 
   const cards = getPool();
   if (cards.length < 2) {
-    results.innerHTML = `<p class="error-state">Add at least two valid monsters to search for fusion sequences.</p>`;
+    results.innerHTML = quiet
+      ? ''
+      : `<p class="error-state">Add at least two valid monsters to search for fusion sequences.</p>`;
     return;
   }
 
   const { outcomes, truncated } = findAllSequences(cards, includeGlitch);
   renderSequenceResults(outcomes, cards, truncated);
+}
+
+/* ── Interactive apply-fusion ─────────────────────────────────────────────── */
+
+function onResultsClick(e) {
+  const btn = e.target.closest('[data-action="apply-fusion"]');
+  if (!btn) return;
+  const slots = btn.dataset.slots ? btn.dataset.slots.split(',').map(Number) : [];
+  startPlacement(slots, btn.dataset.result, btn.dataset.name);
+}
+
+function startPlacement(slots, resultId, resultName) {
+  closePicker();
+  placement.active = true;
+  placement.slots = slots;
+  placement.resultId = resultId;
+  placement.resultName = resultName;
+  // Valid targets: empty slots, plus this fusion's material slots (freed on commit).
+  const matSet = new Set(slots);
+  slotStates.forEach((s) => {
+    s.el.classList.toggle('place-target', s.cardId === null || matSet.has(s.index));
+  });
+  bannerEl.querySelector('.pb-text').textContent = `Placing ${resultName} — click a highlighted slot`;
+  bannerEl.hidden = false;
+}
+
+function commitPlacement(dest) {
+  const matSet = new Set(placement.slots);
+  if (!(slotStates[dest].cardId === null || matSet.has(dest))) return; // not a valid target
+  pushUndo();
+  placement.slots.forEach((i) => { if (i !== dest) setSlotCard(i, null); }); // consume materials
+  setSlotCard(dest, placement.resultId);                                     // drop the result
+  endPlacement();
+  runSearch(true); // re-scan so the new board's fusions show
+}
+
+function cancelPlacement() {
+  endPlacement();
+}
+
+function endPlacement() {
+  placement.active = false;
+  placement.slots = [];
+  placement.resultId = null;
+  placement.resultName = '';
+  slotStates.forEach((s) => s.el.classList.remove('place-target'));
+  if (bannerEl) bannerEl.hidden = true;
+}
+
+function createPlacementBanner() {
+  bannerEl = document.createElement('div');
+  bannerEl.className = 'placement-banner';
+  bannerEl.hidden = true;
+  bannerEl.innerHTML = `<span class="pb-text"></span><button type="button" class="secondary pb-cancel">Cancel</button>`;
+  const results = document.getElementById('sequence-results');
+  results.parentNode.insertBefore(bannerEl, results);
+  bannerEl.querySelector('.pb-cancel').addEventListener('click', cancelPlacement);
+}
+
+/* ── Undo / reset ─────────────────────────────────────────────────────────── */
+
+function pushUndo() {
+  undoStack.push(slotStates.map((s) => s.cardId));
+  updateUndoButton();
+}
+
+function undo() {
+  if (!undoStack.length) return;
+  cancelPlacement();
+  const snap = undoStack.pop();
+  snap.forEach((cardId, i) => setSlotCard(i, cardId));
+  updateUndoButton();
+  runSearch(true);
+}
+
+function resetBoard() {
+  cancelPlacement();
+  if (getPool().length === 0) return; // nothing to reset
+  pushUndo();
+  slotStates.forEach((s) => setSlotCard(s.index, null));
+  runSearch(true);
+}
+
+function updateUndoButton() {
+  const btn = document.getElementById('seq-undo');
+  if (btn) btn.disabled = undoStack.length === 0;
 }
 
 // Forbidden Memories only fuses two cards per action, so finding every
@@ -536,6 +645,10 @@ function createOutcomeCard(outcome, cards) {
     ? `<img class="outcome-card-img" src="${escapeHtml(imageData.localPath)}" alt="${escapeHtml(outcome.resultName)}">`
     : '';
 
+  // Real 0–9 slot indices for the consumed materials (usedSlotIndices are pool-
+  // relative), so an "Apply" can clear the correct slots.
+  const realSlots = outcome.usedSlotIndices.map((i) => cards[i].slotIndex).join(',');
+
   article.innerHTML = `
     ${imgHtml}
     <div class="outcome-card-body">
@@ -546,6 +659,10 @@ function createOutcomeCard(outcome, cards) {
       <div class="chips">${usedChips}</div>
       ${leftoverChips ? `<p class="meta">Left over:</p><div class="chips">${leftoverChips}</div>` : ''}
       <ol class="steps">${stepsList}</ol>
+      <button type="button" class="secondary apply-fusion-btn" data-action="apply-fusion"
+        data-slots="${realSlots}" data-result="${escapeHtml(outcome.resultId)}" data-name="${escapeHtml(outcome.resultName)}">
+        Fuse this &rarr; place ${escapeHtml(outcome.resultName)}
+      </button>
     </div>
   `;
 

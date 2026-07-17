@@ -75,7 +75,8 @@
       <h1>Sequence Planner</h1>
       <p class="subtitle">
         List the monsters in hand or on the field — finds every possible fusion order
-        and shows exactly which cards each result uses.
+        and shows which cards each result uses. Apply any result to consume its
+        materials and drop the fused monster onto the board, then chain the next one.
       </p>
     </header>
 
@@ -84,11 +85,11 @@
         <div class="card-grid">
           <div class="grid-zone">
             <div class="grid-label">field</div>
-            <div class="card-slots" id="hand-slots"></div>
+            <div class="card-slots" id="field-slots"></div>
           </div>
           <div class="grid-zone">
             <div class="grid-label">hand</div>
-            <div class="card-slots" id="field-slots"></div>
+            <div class="card-slots" id="hand-slots"></div>
           </div>
         </div>
 
@@ -97,7 +98,11 @@
           Include glitch fusions
         </label>
 
-        <button type="submit">Find Sequences</button>
+        <div class="seq-controls">
+          <button type="submit">Find Sequences</button>
+          <button type="button" class="secondary" id="seq-undo" disabled>Undo</button>
+          <button type="button" class="secondary" id="seq-reset">Reset board</button>
+        </div>
       </form>
 
       <section id="sequence-results" class="results-list" aria-live="polite"></section>

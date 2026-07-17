@@ -128,10 +128,16 @@ pattern — follow it.
   glitch toggle re-resolves the chain top-down and prunes now-broken continuations
   (`revalidateChain`).
 
-- **`sequencer.js` (Sequence Planner).** User enters a pool of cards; the engine
-  searches fusion pairings (bounded by `MAX_EXPLORED_PAIRS = 20000`). Includes a
-  full pointer-based drag/drop system (mouse + touch long-press) to move/swap
-  cards between slots. Largest controller; self-contained picker + drag logic.
+- **`sequencer.js` (Sequence Planner).** User enters a pool of cards across Field/Hand
+  slots; the engine searches fusion pairings (bounded by `MAX_EXPLORED_PAIRS = 20000`).
+  Includes a full pointer-based drag/drop system (mouse + touch long-press) to move/swap
+  cards between slots. Also **interactive apply-fusion**: each listed outcome has a "Fuse"
+  button that enters placement mode — the user clicks a highlighted slot (empty, or one of
+  the fusion's own material slots) to drop the result into, consuming the materials, then
+  the board re-scans so fusions can be chained. **Undo** (snapshots the board before each
+  apply/reset) and **Reset** back it. Largest controller; self-contained picker + drag logic.
+  Note: `outcome.usedSlotIndices` are pool-relative, so `getPool()` carries each card's real
+  `slotIndex` for the apply to clear the correct slots.
 
 - **`card-library.js` (Card Library).** Master list + detail panel. Detail shows
   art, stats, and a tabbed fusion section: "used as material" (top `TOP_N = 5`
