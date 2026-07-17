@@ -153,9 +153,10 @@ function computeValidPartners(id, includeGlitch) {
   const partnerIds = new Set();
   for (const result of state.fusionResults) {
     if (result.isGlitch && !includeGlitch) continue;
+    if (result.resultId === id) continue; // skip degenerate "fuse X to get X back"
     for (const rule of result.rules) {
-      if (rule.material1.includes(id)) rule.material2.forEach((m) => partnerIds.add(m));
-      if (rule.material2.includes(id)) rule.material1.forEach((m) => partnerIds.add(m));
+      if (rule.material1.includes(id)) rule.material2.forEach((m) => { if (m !== result.resultId) partnerIds.add(m); });
+      if (rule.material2.includes(id)) rule.material1.forEach((m) => { if (m !== result.resultId) partnerIds.add(m); });
     }
   }
   return partnerIds;
@@ -170,6 +171,7 @@ function findFusionMatches(id1, id2, includeGlitch) {
   const matches = [];
   for (const result of state.fusionResults) {
     if (result.isGlitch && !includeGlitch) continue;
+    if (result.resultId === id1 || result.resultId === id2) continue; // no self→self fusions
     const hit = result.rules.some((rule) => {
       const forward = rule.material1.includes(id1) && rule.material2.includes(id2);
       const backward = rule.material1.includes(id2) && rule.material2.includes(id1);

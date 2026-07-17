@@ -38,13 +38,17 @@ const DeckAdvisor = (() => {
       if (!index.has(a)) index.set(a, []);
       index.get(a).push({ resultId, partners });
     };
+    // Drop the result from its own material/partner lists: the FM table has
+    // entries like "X + Y -> X" (and type-based recipes whose partner group
+    // includes the result), which would otherwise read as "fuse X to get X".
+    const without = (set) => { const s = new Set(set); s.delete(r.resultId); return s; };
     for (const r of state.fusionResults) {
       if (r.isGlitch) continue;
       for (const rule of r.rules) {
-        const m1 = new Set(rule.material1);
-        const m2 = new Set(rule.material2);
-        rule.material1.forEach((a) => add(a, r.resultId, m2));
-        rule.material2.forEach((b) => add(b, r.resultId, m1));
+        const m1 = without(new Set(rule.material1));
+        const m2 = without(new Set(rule.material2));
+        rule.material1.forEach((a) => { if (a !== r.resultId) add(a, r.resultId, m2); });
+        rule.material2.forEach((b) => { if (b !== r.resultId) add(b, r.resultId, m1); });
       }
     }
   }
