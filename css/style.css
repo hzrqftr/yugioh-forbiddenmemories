@@ -849,6 +849,11 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
   border-color: var(--border);
 }
 
+.card-slot.spell-placeholder {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
 .slot-placeholder {
   font-family: 'JetBrains Mono', monospace;
   color: var(--muted);
@@ -880,10 +885,10 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
   pointer-events: none;
 }
 
+.slot-spell-btn,
 .slot-clear-btn {
   position: absolute;
   top: 3px;
-  right: 3px;
   width: 18px;
   height: 18px;
   border: none;
@@ -901,7 +906,29 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
   z-index: 2;
 }
 
+.slot-spell-btn[hidden],
+.slot-clear-btn[hidden] { display: none; }
+
+.slot-spell-btn {
+  left: 3px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.slot-clear-btn {
+  right: 3px;
+}
+
 .card-slot:hover .slot-clear-btn { opacity: 1; }
+.card-slot:hover .slot-spell-btn,
+.card-slot:focus-within .slot-spell-btn { opacity: 1; }
+
+@media (hover: none) {
+  .slot-spell-btn { opacity: 0.85; }
+}
 
 /* ── Slot drag & drop (move/swap cards between slots) ─────────────────────── */
 .card-slot img { -webkit-user-drag: none; user-drag: none; }

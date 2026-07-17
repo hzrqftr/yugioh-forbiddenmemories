@@ -138,7 +138,7 @@ function populateCardOptions() {
 
 function filterOptions(options, query) {
   const q = query.trim().toLowerCase();
-  if (!q) return options;
+  if (!q) return options.slice();
   return options.filter((o) => o.name.toLowerCase().includes(q));
 }
 

@@ -1,4 +1,7 @@
 const MAX_EXPLORED_PAIRS = 20000;
+const SPELL_PLACEHOLDER_ID = 'SPELL_PLACEHOLDER';
+const SPELL_PLACEHOLDER_NAME = 'Spell card placeholder';
+const SPELL_PLACEHOLDER_IMAGE = 'images/spell-placeholder.webp';
 
 const slotStates = [];
 let activeSlotIndex = -1;
@@ -40,6 +43,23 @@ function compactHandSlots() {
   for (let i = 0; i < 5; i += 1) {
     setSlotCard(i, handCards[i] || null);
   }
+}
+
+function isSpellPlaceholder(cardId) {
+  return cardId === SPELL_PLACEHOLDER_ID;
+}
+
+function isSearchCard(cardId) {
+  return cardId !== null && !isSpellPlaceholder(cardId);
+}
+
+function getCardLabel(cardId) {
+  if (isSpellPlaceholder(cardId)) return SPELL_PLACEHOLDER_NAME;
+  return state.cardsById.get(cardId)?.name || cardId;
+}
+
+function hasAnySlotCard() {
+  return slotStates.some((s) => s.cardId !== null);
 }
 
 init();
@@ -114,14 +134,16 @@ function initSlots() {
     slotEl.innerHTML = `
       <div class="slot-placeholder">+</div>
       <img class="slot-img" alt="" draggable="false" hidden>
+      <button type="button" class="slot-spell-btn" aria-label="Set spell card placeholder" title="Set spell placeholder" hidden>S</button>
       <button type="button" class="slot-clear-btn" aria-label="Clear card" hidden>&times;</button>
     `;
 
     container.appendChild(slotEl);
     slotStates.push({ index: slotIndex, zone, cardId: null, el: slotEl });
+    setSlotCard(slotIndex, null);
 
     slotEl.addEventListener('click', (e) => {
-      if (e.target.closest('.slot-clear-btn')) return;
+      if (e.target.closest('.slot-clear-btn, .slot-spell-btn')) return;
       if (drag.didDrag) { drag.didDrag = false; return; } // swallow the click after a drag
       if (placement.active) { commitPlacement(slotIndex); return; } // placing a fused result
       openPicker(slotIndex);
@@ -130,6 +152,11 @@ function initSlots() {
     slotEl.querySelector('.slot-clear-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       clearSlot(slotIndex);
+    });
+
+    slotEl.querySelector('.slot-spell-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectCard(slotIndex, SPELL_PLACEHOLDER_ID);
     });
 
     slotEl.addEventListener('pointerdown', (e) => onSlotPointerDown(e, slotIndex));
@@ -222,38 +249,52 @@ function setSlotCard(slotIndex, cardId) {
 
   const imgEl = slot.el.querySelector('.slot-img');
   const placeholderEl = slot.el.querySelector('.slot-placeholder');
+  const spellBtnEl = slot.el.querySelector('.slot-spell-btn');
   const clearBtnEl = slot.el.querySelector('.slot-clear-btn');
 
   if (slot.cardId) {
-    const imageData = state.cardImagesById.get(slot.cardId);
-    if (imageData?.localPath) {
-      imgEl.src = imageData.localPath;
-      imgEl.alt = state.cardsById.get(slot.cardId)?.name || '';
+    if (isSpellPlaceholder(slot.cardId)) {
+      imgEl.src = SPELL_PLACEHOLDER_IMAGE;
+      imgEl.alt = SPELL_PLACEHOLDER_NAME;
       imgEl.hidden = false;
       placeholderEl.hidden = true;
       placeholderEl.classList.remove('filled-label');
     } else {
-      imgEl.hidden = true;
-      imgEl.removeAttribute('src');
-      placeholderEl.textContent = state.cardsById.get(slot.cardId)?.name || slot.cardId;
-      placeholderEl.classList.add('filled-label');
-      placeholderEl.hidden = false;
+      const imageData = state.cardImagesById.get(slot.cardId);
+      if (imageData?.localPath) {
+        imgEl.src = imageData.localPath;
+        imgEl.alt = getCardLabel(slot.cardId);
+        imgEl.hidden = false;
+        placeholderEl.hidden = true;
+        placeholderEl.classList.remove('filled-label');
+      } else {
+        imgEl.hidden = true;
+        imgEl.removeAttribute('src');
+        placeholderEl.textContent = getCardLabel(slot.cardId);
+        placeholderEl.classList.add('filled-label');
+        placeholderEl.hidden = false;
+      }
     }
+    spellBtnEl.hidden = true;
     clearBtnEl.hidden = false;
     slot.el.classList.add('filled');
+    slot.el.classList.toggle('spell-placeholder', isSpellPlaceholder(slot.cardId));
   } else {
     imgEl.hidden = true;
     imgEl.removeAttribute('src');
     placeholderEl.textContent = '+';
     placeholderEl.classList.remove('filled-label');
     placeholderEl.hidden = false;
+    spellBtnEl.hidden = slot.zone !== 'hand';
     clearBtnEl.hidden = true;
     slot.el.classList.remove('filled');
+    slot.el.classList.remove('spell-placeholder');
   }
 }
 
 function selectCard(slotIndex, cardId) {
   if (slotIndex < 0 || slotIndex >= slotStates.length) return;
+  if (isSpellPlaceholder(cardId) && slotStates[slotIndex].zone !== 'hand') return;
   setSlotCard(slotIndex, cardId);
   closePicker();
   clearSequenceResults();
@@ -271,6 +312,8 @@ function moveCard(from, to) {
   const a = slotStates[from].cardId;
   const b = slotStates[to].cardId;
   if (a == null) return;
+  if (isSpellPlaceholder(a) && slotStates[to].zone !== 'hand') return;
+  if (isSpellPlaceholder(b) && slotStates[from].zone !== 'hand') return;
   setSlotCard(to, a);
   setSlotCard(from, b); // b is null → move; otherwise → swap
   clearSequenceResults();
@@ -281,7 +324,7 @@ function moveCard(from, to) {
 function onSlotPointerDown(e, slotIndex) {
   if (placement.active) return;                            // no dragging while placing a result
   if (e.button != null && e.button > 0) return;            // ignore non-primary buttons
-  if (e.target.closest('.slot-clear-btn')) return;         // clear button isn't a drag handle
+  if (e.target.closest('.slot-clear-btn, .slot-spell-btn')) return; // slot buttons are not drag handles
   if (slotStates[slotIndex].cardId == null) return;        // only filled slots are draggable
   if (drag.armed || drag.active) return;
 
@@ -343,7 +386,7 @@ function beginDrag() {
   drag.ghost.className = 'slot-drag-ghost';
   drag.ghost.innerHTML = img?.localPath
     ? `<img src="${img.localPath}" alt="">`
-    : `<span>${escapeHtml(state.cardsById.get(cardId)?.name || cardId)}</span>`;
+    : `<span>${escapeHtml(getCardLabel(cardId))}</span>`;
   document.body.appendChild(drag.ghost);
 
   positionGhost(drag.lastX, drag.lastY);
@@ -416,8 +459,8 @@ function teardownDrag() {
 
 function getPool() {
   return slotStates
-    .filter((s) => s.cardId !== null)
-    .map((s) => ({ id: s.cardId, name: state.cardsById.get(s.cardId).name, slotIndex: s.index, zone: s.zone }));
+    .filter((s) => isSearchCard(s.cardId))
+    .map((s) => ({ id: s.cardId, name: getCardLabel(s.cardId), slotIndex: s.index, zone: s.zone }));
 }
 
 function clearSequenceResults() {
@@ -523,7 +566,7 @@ function undo() {
 
 function resetBoard() {
   cancelPlacement();
-  if (getPool().length === 0) return; // nothing to reset
+  if (!hasAnySlotCard()) return; // nothing to reset
   pushUndo();
   slotStates.forEach((s) => setSlotCard(s.index, null));
   runSearch(true);
