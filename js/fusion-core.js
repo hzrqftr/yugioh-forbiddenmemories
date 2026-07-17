@@ -13,6 +13,7 @@ const state = {
 
 async function loadCoreData() {
   await Promise.all([loadCards(), loadFusions(), loadCardImages()]);
+  await loadCardMeta(); // needs cardsById populated to merge onto
   populateCardOptions();
 }
 
@@ -50,6 +51,20 @@ async function loadCardImages() {
     }
   } catch {
     // images are optional; proceed without them
+  }
+}
+
+// Extra per-card metadata (Guardian Stars + in-game description), keyed by the
+// same zero-padded id. Optional — merged onto the card objects if present.
+async function loadCardMeta() {
+  try {
+    const meta = await fetchJson(DATA_BASE + 'card_meta.json');
+    for (const [id, m] of Object.entries(meta)) {
+      const card = state.cardsById.get(id);
+      if (card) { card.gsA = m.gsA; card.gsB = m.gsB; card.desc = m.desc; }
+    }
+  } catch {
+    // metadata is optional; proceed without guardian stars / descriptions
   }
 }
 

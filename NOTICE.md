@@ -23,6 +23,16 @@ In accordance with that license's *ShareAlike* term, the data files in
 `card_images.json` manifest — are made available under the **same license,
 CC BY-SA 4.0**, with attribution to Yugipedia and its contributors.
 
+## Card metadata — YGO-FM-Database
+
+The Guardian-Star and description metadata in
+[`data/card_meta.json`](data/card_meta.json) is derived from
+**[falsepopsky/YGO-FM-Database](https://github.com/falsepopsky/YGO-FM-Database)**
+(itself sourced from the Yu-Gi-Oh! Wikia). Guardian-Star values are factual game
+data; the card **description text is © Konami**, included for reference and
+identification under the same good-faith **fair-use** stance as the card names
+and images. See [`DATASET.md`](DATASET.md) for the shape and generation details.
+
 ## Card images — Yu-Gi-Oh! Fandom wiki (not freely licensed)
 
 The card images in [`images/`](images/) were retrieved from the

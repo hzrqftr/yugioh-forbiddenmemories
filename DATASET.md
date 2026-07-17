@@ -48,3 +48,18 @@ Source: Yugipedia's [Forbidden Memories fusion index](https://yugipedia.com/wiki
 All 722 cards now have an image. #206 (Twin Long Rods #1) and #557 (Steel Ogre Grotto #1) had no art on the Fandom wiki at scrape time; they were added by hand afterward from Fandom and Yugipedia respectively (see their `sourceUrl`), so there's no `null` case left to handle in the UI, though it's still safe to leave that fallback in place.
 
 Images were scraped from the [Yugipedia/Fandom Yu-Gi-Oh! wiki](https://yugioh.fandom.com/wiki/List_of_Yu-Gi-Oh!_Forbidden_Memories_cards) via its MediaWiki API and are served as WebP. Card artwork is © Konami; retain attribution and comply with the source site's license when publishing.
+
+## Card metadata (Guardian Stars + description)
+
+`data/card_meta.json` adds FM-specific per-card metadata, keyed by the same zero-padded card number. It's merged onto the in-memory card objects at load (`gsA`/`gsB`/`desc`), and powers the Deck Builder's hover popover and strategy advisor (guardian-star coverage). Shape:
+
+~~~
+{
+  "001": { "gsA": "Sun", "gsB": "Mars", "desc": "An extremely rare card with ..." }
+}
+~~~
+
+- `gsA` / `gsB` — the card's two **Guardian Stars** (one of Mars, Jupiter, Saturn, Uranus, Pluto, Neptune, Mercury, Sun, Moon, Venus). `null` for non-monsters (they have no stars). The star wheel: Group 1 `Sun→Moon→Venus→Mercury→Sun`, Group 2 `Mars→Jupiter→Saturn→Uranus→Pluto→Neptune→Mars` (each beats the next, +500 ATK/DEF in battle).
+- `desc` — the in-game card description text (whitespace-normalized).
+
+Generated once from **[falsepopsky/YGO-FM-Database](https://github.com/falsepopsky/YGO-FM-Database)** `data/cards_v.json` (Wikia-derived; guardian stars are 1-indexed there, `0` = none). Card descriptions are © Konami, shown for reference/identification under the same non-commercial fair-use stance as card names and art. Retain attribution when publishing.

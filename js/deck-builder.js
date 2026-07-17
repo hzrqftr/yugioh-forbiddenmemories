@@ -8,9 +8,18 @@ const SORT_FIELDS = [
   { key: 'atk', label: 'ATK' },
   { key: 'def', label: 'DEF' },
 ];
-const DECK_MIN = 40;
-const dbState = { query: '', typeFilter: 'All', sortBy: 'id', sortDir: 'asc' };
+const DECK_SIZE = 40; // FM caps a deck at exactly 40 cards (no more than 40)
+const MEMBERSHIP = [
+  { key: 'all', label: 'All cards' },
+  { key: 'deck', label: 'In deck' },
+  { key: 'trunk', label: 'In trunk' },
+  { key: 'owned', label: 'Owned' },
+];
+const CAN_HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const dbState = { query: '', typeFilter: 'All', sortBy: 'id', sortDir: 'asc', membership: 'all' };
 let allCards = [];
+let currentAdvice = { adviceById: new Map(), suggestions: [], counts: { adds: 0, swaps: 0 }, weakestDeckId: null };
+let cardTip = null;
 
 init();
 
@@ -23,11 +32,14 @@ async function init() {
   }
 
   allCards = [...state.cardsById.values()].sort((a, b) => a.id.localeCompare(b.id));
+  DeckAdvisor.buildIndex();
   DeckStore.ensureDeck();
 
   buildTypeSelect();
+  buildMembershipSelect();
   buildSortControls();
   wireEvents();
+  setupTooltip();
   DeckStore.onChange(renderAll);
   renderAll();
   initSync();
@@ -84,11 +96,27 @@ function wireEvents() {
   document.getElementById('sync-signout').addEventListener('click', doSignOut);
   document.getElementById('sync-push').addEventListener('click', () => runSync('push'));
   document.getElementById('sync-pull').addEventListener('click', () => runSync('pull'));
+
+  document.getElementById('suggest-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const deck = DeckStore.getActiveDeck();
+    if (!deck) return;
+    const id = btn.dataset.id;
+    if (btn.dataset.action === 'suggest-add') {
+      addToDeck(id);
+    } else if (btn.dataset.action === 'suggest-replace') {
+      const target = btn.dataset.target;
+      if (target) DeckStore.setDeckCard(deck.id, target, (deck.cards[target] || 0) - 1);
+      DeckStore.setDeckCard(deck.id, id, (deck.cards[id] || 0) + 1);
+    }
+  });
 }
 
 function addToDeck(id) {
   const deck = DeckStore.getActiveDeck();
   if (!deck) return;
+  if (DeckStore.deckTotal(deck) >= DECK_SIZE) return; // hard cap: no more than 40
   DeckStore.setDeckCard(deck.id, id, (deck.cards[id] || 0) + 1);
 }
 
@@ -100,6 +128,14 @@ function buildTypeSelect() {
     .map((t) => `<option value="${t}"${t === dbState.typeFilter ? ' selected' : ''}>${t === 'All' ? 'All types' : t}</option>`)
     .join('');
   sel.addEventListener('change', () => { dbState.typeFilter = sel.value; renderCollectionTop(); });
+}
+
+function buildMembershipSelect() {
+  const sel = document.getElementById('collection-view');
+  sel.innerHTML = MEMBERSHIP
+    .map((m) => `<option value="${m.key}"${m.key === dbState.membership ? ' selected' : ''}>${m.label}</option>`)
+    .join('');
+  sel.addEventListener('change', () => { dbState.membership = sel.value; renderCollectionTop(); });
 }
 
 function buildSortControls() {
@@ -128,9 +164,17 @@ function renderCollectionTop() {
 
 function visibleCards() {
   const q = dbState.query.trim().toLowerCase();
+  const deck = DeckStore.getActiveDeck();
   const filtered = allCards.filter((c) => {
     if (dbState.typeFilter !== 'All' && c.cardType !== dbState.typeFilter) return false;
     if (q && !c.name.toLowerCase().includes(q)) return false;
+    if (dbState.membership !== 'all') {
+      const owned = DeckStore.getOwned(c.id);
+      const inDeck = deck ? (deck.cards[c.id] || 0) : 0;
+      if (dbState.membership === 'deck' && inDeck === 0) return false;         // in the deck
+      if (dbState.membership === 'trunk' && !(owned > 0 && inDeck === 0)) return false; // owned, not in deck
+      if (dbState.membership === 'owned' && owned === 0) return false;          // owned (any)
+    }
     return true;
   });
   return sortCards(filtered);
@@ -174,6 +218,7 @@ function renderCollection() {
     : 'collection';
 
   const activeDeck = DeckStore.getActiveDeck();
+  const deckFull = activeDeck ? DeckStore.deckTotal(activeDeck) >= DECK_SIZE : false;
   const scroll = listEl.scrollTop;
   listEl.innerHTML = cards.map((c) => {
     const owned = DeckStore.getOwned(c.id);
@@ -182,17 +227,26 @@ function renderCollection() {
     let tag = '';
     if (inDeck) tag = `<span class="in-deck-tag" title="${inDeck} in the current deck">in deck ×${inDeck}</span>`;
     else if (owned) tag = `<span class="in-trunk-tag" title="${owned} owned, not in the current deck">in trunk ×${owned}</span>`;
+    // Advisor badge for owned-but-unused monsters (strong add / better replacement).
+    let badge = '';
+    if (!inDeck && owned) {
+      const adv = currentAdvice.adviceById.get(c.id);
+      if (adv && (adv.category === 'strong' || adv.category === 'replace')) {
+        const icon = adv.category === 'strong' ? '⭐' : '🔁';
+        badge = `<span class="advice-badge ${adv.category}" title="${escapeHtml(adv.label + ' — ' + adv.reason)}">${icon}</span>`;
+      }
+    }
     return `
       <li class="library-row deck-row${inDeck ? ' in-deck' : ''}">
         <span class="row-id">#${escapeHtml(c.id)}</span>
         <span class="row-name">${escapeHtml(c.name)}</span>
-        ${tag}
+        ${tag}${badge}
         <span class="qty-stepper" role="group" aria-label="Owned quantity">
           <button type="button" class="qty-btn" data-action="own-dec" data-id="${escapeHtml(c.id)}" ${owned === 0 ? 'disabled' : ''} aria-label="Own one fewer">&minus;</button>
           <span class="qty-val${owned ? ' has' : ''}">${owned}</span>
           <button type="button" class="qty-btn" data-action="own-inc" data-id="${escapeHtml(c.id)}" ${owned >= DeckStore.MAX_COPIES ? 'disabled' : ''} aria-label="Own one more">+</button>
         </span>
-        <button type="button" class="add-deck-btn" data-action="add-deck" data-id="${escapeHtml(c.id)}" aria-label="Add to deck">+deck</button>
+        <button type="button" class="add-deck-btn" data-action="add-deck" data-id="${escapeHtml(c.id)}" ${deckFull ? 'disabled' : ''} title="${deckFull ? 'Deck is full (40)' : 'Add to deck'}" aria-label="Add to deck">+deck</button>
       </li>`;
   }).join('') || '<li class="library-empty">No cards match.</li>';
   listEl.scrollTop = scroll;
@@ -210,10 +264,12 @@ function renderDeckHead() {
   const meter = document.getElementById('deck-meter');
   if (!deck) { meter.textContent = ''; return; }
   const total = DeckStore.deckTotal(deck);
-  const ok = total >= DECK_MIN;
-  meter.className = 'deck-meter' + (ok ? ' ok' : ' under');
-  meter.innerHTML = `<span class="meter-count">${total} / ${DECK_MIN}</span>` +
-    (ok ? '<span class="meter-note">deck ready</span>' : `<span class="meter-note">need ${DECK_MIN - total} more</span>`);
+  let cls, note;
+  if (total > DECK_SIZE) { cls = ' over'; note = `over by ${total - DECK_SIZE} — remove some`; }
+  else if (total === DECK_SIZE) { cls = ' ok'; note = 'deck full'; }
+  else { cls = ' under'; note = `need ${DECK_SIZE - total} more`; }
+  meter.className = 'deck-meter' + cls;
+  meter.innerHTML = `<span class="meter-count">${total} / ${DECK_SIZE}</span><span class="meter-note">${note}</span>`;
 }
 
 function renderDeckList() {
@@ -376,9 +432,154 @@ function importFile(e) {
 /* ── Render orchestration ────────────────────────────────────────────────── */
 
 function renderAll() {
+  currentAdvice = DeckAdvisor.analyze(DeckStore.getActiveDeck(), DeckStore.getCollection());
   renderCollection();
   renderDeckHead();
   renderDeckList();
+  renderSuggestions();
   updateSyncButtons();
   renderSyncStatus();
+}
+
+/* ── Suggestions panel ───────────────────────────────────────────────────── */
+
+function renderSuggestions() {
+  const summary = document.getElementById('suggest-summary');
+  const listEl = document.getElementById('suggest-list');
+  if (!summary || !listEl) return;
+  const { suggestions, counts } = currentAdvice;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+  summary.textContent = `suggestions · ${plural(counts.adds, 'add')} · ${plural(counts.swaps, 'swap')}`;
+
+  if (!suggestions.length) {
+    listEl.innerHTML = '<li class="suggest-empty">Own cards outside this deck to get suggestions.</li>';
+    return;
+  }
+  listEl.innerHTML = suggestions.map((s) => {
+    const action = s.category === 'replace'
+      ? `<button type="button" class="secondary suggest-act" data-action="suggest-replace" data-id="${escapeHtml(s.id)}" data-target="${escapeHtml(s.targetId)}">Swap in</button>`
+      : `<button type="button" class="secondary suggest-act" data-action="suggest-add" data-id="${escapeHtml(s.id)}">Add</button>`;
+    return `
+      <li class="suggest-row">
+        <span class="suggest-verdict ${s.category}">${s.label}</span>
+        <span class="suggest-main">
+          <span class="suggest-name">#${escapeHtml(s.id)} ${escapeHtml(s.name)}</span>
+          <span class="suggest-reason">${escapeHtml(s.reason)}</span>
+        </span>
+        ${action}
+      </li>`;
+  }).join('');
+}
+
+/* ── Hover popover (desktop only) — deck-contextual card detail ───────────── */
+
+function setupTooltip() {
+  if (!CAN_HOVER) return;
+  cardTip = document.createElement('div');
+  cardTip.className = 'card-tip deck-tip';
+  cardTip.hidden = true;
+  document.body.appendChild(cardTip);
+
+  ['collection-list', 'deck-list'].forEach((listId) => {
+    const el = document.getElementById(listId);
+    if (!el) return;
+    el.addEventListener('mouseover', (e) => {
+      const row = e.target.closest('li');
+      if (row && el.contains(row)) showTip(row);
+    });
+    el.addEventListener('mouseout', (e) => {
+      const row = e.target.closest('li');
+      if (row && (!e.relatedTarget || !row.contains(e.relatedTarget))) hideTip();
+    });
+  });
+  window.addEventListener('scroll', hideTip, true);
+}
+
+function rowCardId(row) {
+  const el = row.querySelector('[data-id]');
+  return el ? el.dataset.id : null;
+}
+
+function tipHtml(id) {
+  const card = state.cardsById.get(id);
+  if (!card) return '';
+  const isMonster = card.cardType === 'Monster';
+  const img = state.cardImagesById.get(id);
+  const thumb = img && img.localPath
+    ? `<img class="tip-thumb" src="${escapeHtml(img.localPath)}" alt="">`
+    : '';
+  const statLine = isMonster
+    ? `${escapeHtml(card.monsterType)} · Lv ${escapeHtml(card.level)} · ATK ${escapeHtml(card.atk)} / DEF ${escapeHtml(card.def)}`
+    : `${escapeHtml(card.cardType)} · utility card`;
+
+  const rows = [];
+  if (isMonster && card.gsA) {
+    const beats = [DeckAdvisor.starBeats(card.gsA), DeckAdvisor.starBeats(card.gsB)].filter(Boolean);
+    rows.push(`<span class="tip-gs">★ ${escapeHtml(card.gsA)} / ${escapeHtml(card.gsB)}${beats.length ? ` · beats ${escapeHtml(beats.join(', '))}` : ''}</span>`);
+  }
+  if (card.desc) rows.push(`<span class="tip-desc">${escapeHtml(card.desc)}</span>`);
+
+  const owned = DeckStore.getOwned(id);
+  const deck = DeckStore.getActiveDeck();
+  const inDeck = deck ? (deck.cards[id] || 0) : 0;
+  rows.push(`<span class="tip-row">Owned ×${owned} · In deck ×${inDeck}</span>`);
+
+  if (isMonster) {
+    const fs = DeckAdvisor.fusionSummary(id, deck);
+    if (fs.partnerCount > 0 && fs.resultId) {
+      const res = state.cardsById.get(fs.resultId);
+      const partner = state.cardsById.get(fs.partnerId);
+      rows.push(`<span class="tip-row">Fuses with ${fs.partnerCount} deck card${fs.partnerCount === 1 ? '' : 's'} → ${escapeHtml(res ? res.name : '?')} (${res ? escapeHtml(res.atk) : '?'} ATK) with ${escapeHtml(partner ? partner.name : '?')}</span>`);
+    } else {
+      rows.push('<span class="tip-row">No fusions with your current deck.</span>');
+    }
+  }
+
+  // Verdict / standing line.
+  let verdict;
+  if (!isMonster) {
+    verdict = 'utility card — judge manually';
+  } else if (inDeck > 0) {
+    verdict = id === currentAdvice.weakestDeckId ? '⚠ weakest monster in your deck' : 'in your deck';
+  } else {
+    const adv = currentAdvice.adviceById.get(id);
+    verdict = adv ? `${adv.label} — ${adv.reason}` : '';
+  }
+  if (verdict) rows.push(`<span class="tip-verdict">${escapeHtml(verdict)}</span>`);
+
+  return `
+    <div class="tip-head">
+      ${thumb}
+      <div class="tip-headtext">
+        <span class="tip-name">${escapeHtml(card.name)}</span>
+        <span class="tip-stat">#${escapeHtml(card.id)} · ${statLine}</span>
+      </div>
+    </div>
+    ${rows.join('')}`;
+}
+
+function showTip(row) {
+  const id = rowCardId(row);
+  if (!id || !cardTip) return;
+  const html = tipHtml(id);
+  if (!html) return;
+  cardTip.innerHTML = html;
+  cardTip.hidden = false;
+
+  const r = row.getBoundingClientRect();
+  const tipW = cardTip.offsetWidth;
+  let left = Math.min(r.left, window.innerWidth - tipW - 8);
+  left = Math.max(8, left);
+  cardTip.style.left = left + 'px';
+  if (r.top > window.innerHeight / 2) {
+    cardTip.style.top = (r.top - 8) + 'px';
+    cardTip.style.transform = 'translateY(-100%)';
+  } else {
+    cardTip.style.top = (r.bottom + 8) + 'px';
+    cardTip.style.transform = 'none';
+  }
+}
+
+function hideTip() {
+  if (cardTip) cardTip.hidden = true;
 }

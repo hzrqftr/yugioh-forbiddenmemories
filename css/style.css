@@ -1391,8 +1391,10 @@ main.deckbuild {
 .deck-meter { display: flex; align-items: baseline; gap: 0.6rem; font-family: 'JetBrains Mono', monospace; }
 .deck-meter .meter-count { font-size: 1.15rem; font-weight: 600; color: var(--muted); }
 .deck-meter.ok .meter-count { color: var(--accent-hi); }
+.deck-meter.over .meter-count { color: var(--glitch); }
 .deck-meter .meter-note { font-size: 0.72rem; color: var(--muted); }
 .deck-meter.ok .meter-note { color: var(--accent-hi); }
+.deck-meter.over .meter-note { color: var(--glitch); }
 
 .deck-list {
   flex: 1;
@@ -1426,7 +1428,8 @@ main.deckbuild {
 }
 
 .sync-panel summary,
-.tools-manual summary {
+.tools-manual summary,
+.suggest-panel summary {
   cursor: pointer;
   margin: 0;
 }
@@ -1470,6 +1473,52 @@ main.deckbuild {
   color: var(--muted);
   border: 1px solid var(--border);
 }
+
+/* Advisor verdict badge on trunk rows (⭐ strong add / 🔁 replacement) */
+.advice-badge { flex-shrink: 0; font-size: 0.8rem; line-height: 1; cursor: help; }
+
+/* Suggestions panel */
+.suggest-list {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.suggest-empty { font-size: 0.74rem; color: var(--muted); padding: 0.3rem 0.1rem; }
+.suggest-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--border-sub);
+  border-radius: 6px;
+}
+.suggest-verdict {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.suggest-verdict.strong, .suggest-verdict.replace { color: var(--accent-hi); }
+.suggest-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.suggest-name { font-size: 0.8rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggest-reason { font-size: 0.64rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.suggest-act { flex-shrink: 0; font-size: 0.68rem; padding: 0.25rem 0.5rem; }
+
+/* Deck-builder hover popover (extends the shared .card-tip) */
+.deck-tip { max-width: 300px; gap: 0.25rem; }
+.card-tip .tip-head { display: flex; gap: 0.5rem; align-items: flex-start; }
+.card-tip .tip-thumb { width: 34px; height: 50px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); flex-shrink: 0; }
+.card-tip .tip-headtext { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.card-tip .tip-gs { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--accent-hi); }
+.card-tip .tip-desc { font-size: 0.68rem; color: var(--text); opacity: 0.85; font-style: italic; }
+.card-tip .tip-row { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--muted); }
+.card-tip .tip-verdict { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent-hi); margin-top: 0.1rem; }
 
 /* Running copy number in the deck list (mirrors the in-game left column) */
 .row-seq {

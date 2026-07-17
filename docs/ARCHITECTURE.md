@@ -63,6 +63,7 @@ js/ui.js                        shared chrome (sidebar + theme); self-invoking, 
 js/config.js                    APP_CONFIG (deck-builder only)
 js/deck-store.js                DeckStore (deck-builder only)
 js/drive-sync.js                DriveSync (deck-builder only)
+js/deck-advisor.js              DeckAdvisor (deck-builder only; needs state + deck-store)
 <page controller>.js            app.js | sequencer.js | card-library.js | deck-builder.js
 ```
 
@@ -85,9 +86,12 @@ state = {
 
 ### 4b. Data loading — `loadCoreData()`
 Fetches, in parallel: the card CSV, all fusion parts (via the manifest), and the
-card-images JSON; then builds `monsterOptions`. Card images are optional (loader
-swallows their failure). Includes a small RFC4180-ish `parseCSV()` that handles
-quoted fields (needed for values like `"999,999"` in the SC Cost column).
+card-images JSON; then merges optional `card_meta.json` (Guardian Stars + in-game
+description → `card.gsA`/`card.gsB`/`card.desc`) and builds `monsterOptions`. Card
+images and metadata are optional (loaders swallow their failure). Includes a small
+RFC4180-ish `parseCSV()` that handles quoted fields (needed for values like
+`"999,999"` in the SC Cost column). See [`../DATASET.md`](../DATASET.md) for
+`card_meta.json`'s shape and provenance.
 
 ### 4c. The fusion engine
 - `computeValidPartners(id, includeGlitch)` → set of monster ids that fuse with `id`.
@@ -142,7 +146,22 @@ pattern — follow it.
   collection's `+deck`. Owned-awareness is per copy and not enforced: within a
   card's copies the first N (N = owned) show "✓ owned", extras are flagged. All
   state flows through `DeckStore`; the UI subscribes via `DeckStore.onChange(renderAll)`
-  and re-renders. `DECK_MIN = 40`. Also owns the sync panel wiring (see §6).
+  and re-renders. A deck holds **exactly 40 cards** — FM caps the deck at 40 (unlike
+  later games): the UI blocks adds past 40 (`DECK_SIZE = 40`) and the meter flags an
+  under-/over-limit deck. The collection pane also has a **membership filter** (All /
+  In deck / In trunk / Owned). Also owns the sync panel wiring (see §6), a
+  desktop **hover popover** (reuses the shared `.card-tip`; shows guardian stars,
+  description, owned/in-deck counts, deck-contextual fusion synergy, and the advisor
+  verdict), and the **strategy advisor** surface (badges + suggestions panel).
+
+- **`deck-advisor.js` (`DeckAdvisor`).** A heuristic strategy helper. `buildIndex()`
+  precomputes a fusion pairing index; `analyze(deck, collection)` scores each **monster**
+  as `combat(ATK + 0.25·DEF) + fusion-upside-with-deck + partner-count + guardian-star-
+  coverage`, ranks the deck, and returns a verdict per owned-but-unused ("trunk") card:
+  ⭐ strong add / ➕ situational (deck has room) or 🔁 replace #X / ➖ skip (deck full) —
+  each with a plain-language reason. Non-monsters are not scored (no card-effect data),
+  shown as "utility — judge manually". It's an explainable heuristic, **not** an optimal
+  solver: no card effects, no fusion-AI model. Weights are tunable constants at the top.
 
 ## 6. Persistence & sync (Deck Builder)
 

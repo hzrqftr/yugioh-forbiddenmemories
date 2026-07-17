@@ -37,25 +37,25 @@
             <li>
               <a href="index.html" class="nav-link">
                 <span class="nav-dot"></span>
-                <span class="nav-label">fusion-finder.js</span>
+                <span class="nav-label">Fusion Finder</span>
               </a>
             </li>
             <li>
               <a href="sequencer.html" class="nav-link">
                 <span class="nav-dot"></span>
-                <span class="nav-label">sequence-planner.js</span>
+                <span class="nav-label">Sequence Planner</span>
               </a>
             </li>
             <li>
               <a href="card-library.html" class="nav-link">
                 <span class="nav-dot"></span>
-                <span class="nav-label">card-library.js</span>
+                <span class="nav-label">Card Library</span>
               </a>
             </li>
             <li>
               <a href="deck-builder.html" class="nav-link active" aria-current="page">
                 <span class="nav-dot"></span>
-                <span class="nav-label">deck-builder.js</span>
+                <span class="nav-label">Deck Builder</span>
               </a>
             </li>
           </ul>
@@ -87,6 +87,7 @@
           <div class="toolbar-controls">
             <input type="text" id="collection-search" class="library-search" placeholder="Search…" autocomplete="off" aria-label="Search cards by name">
             <select id="collection-type" class="toolbar-select" aria-label="Filter by card type"></select>
+            <select id="collection-view" class="toolbar-select" aria-label="Filter by deck membership"></select>
             <select id="collection-sort" class="toolbar-select" aria-label="Sort cards by"></select>
             <button type="button" class="sort-dir" id="collection-sort-dir" aria-label="Sort ascending" title="Toggle ascending / descending">↑</button>
           </div>
@@ -109,6 +110,12 @@
         <ul class="deck-list" id="deck-list" aria-label="Cards in deck"></ul>
 
         <div class="deck-tools">
+          <details class="suggest-panel">
+            <summary class="grid-label" id="suggest-summary">suggestions</summary>
+            <p class="tools-note">Owned cards outside this deck, judged by ATK/DEF, fusion synergy &amp; Guardian-Star coverage. Heuristic — no card-effect data.</p>
+            <ul class="suggest-list" id="suggest-list"></ul>
+          </details>
+
           <details class="sync-panel" open>
             <summary class="grid-label">google drive sync</summary>
             <p class="sync-note">Sync across devices via a private file in your own Google Drive — nothing stored publicly.</p>
@@ -170,6 +177,7 @@
 <script src="js/config.js"></script>
 <script src="js/deck-store.js"></script>
 <script src="js/drive-sync.js"></script>
+<script src="js/deck-advisor.js"></script>
 <script src="js/deck-builder.js"></script>
 </body>
 </html>

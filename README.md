@@ -25,7 +25,7 @@ database, no tracking, no cost.
 | **Fusion Finder** | `index.html` | `js/app.js` | Chain two-card fusion equations (A + B → C); each result can be fused further into a numbered play sequence. |
 | **Sequence Planner** | `sequencer.html` | `js/sequencer.js` | Given a pool of cards in hand, search for the best fusion sequence; drag-and-drop slots. |
 | **Card Library** | `card-library.html` | `js/card-library.js` | Browse all 722 cards; detail panel with art, stats, "used as material" and "how to summon" fusion tabs, plus acquisition info. |
-| **Deck Builder** | `deck-builder.html` | `js/deck-builder.js` | Track owned cards (0–3 each) and build decks; owned-aware (flags shortfalls) but not enforced. Saves locally; export/import; optional Google Drive sync. |
+| **Deck Builder** | `deck-builder.html` | `js/deck-builder.js` | Track owned cards (0–3 each) and build a deck (FM's 40-card cap enforced); owned-aware (flags shortfalls). Hover popover + a heuristic **strategy advisor** (add/replace suggestions using ATK/DEF, fusion synergy & Guardian Stars). Saves locally; export/import; optional Google Drive sync. |
 
 All pages share the same chrome (sidebar nav, theme toggle, footer) and the same
 data/engine core (`js/fusion-core.js`).
@@ -75,11 +75,13 @@ js/
   card-library.js             # Card Library controller
   deck-builder.js             # Deck Builder UI controller
   deck-store.js               # Deck Builder data layer (localStorage, export/import)
+  deck-advisor.js             # Deck Builder strategy advisor (scoring + add/replace suggestions)
   drive-sync.js               # PORTABLE Google Drive sync module (reusable across apps)
   config.js                   # per-app config: Google Client ID + appKey
 data/
   forbidden_memories_cards.csv        # 722-card catalogue
   card_images.json                    # card # -> local WebP path + source
+  card_meta.json                      # card # -> Guardian Stars + in-game description
   fusion_rules_manifest.json          # lists the fusion parts to load
   fusion_rules_part_01..11.json       # normalized fusion rules
 images/NNN.webp               # one per card (zero-padded id), 722 total
