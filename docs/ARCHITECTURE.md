@@ -129,7 +129,13 @@ pattern — follow it.
   (`revalidateChain`).
 
 - **`sequencer.js` (Sequence Planner).** User enters a pool of cards across Field/Hand
-  slots; the engine searches fusion pairings (bounded by `MAX_EXPLORED_PAIRS = 20000`).
+  slots; the engine enumerates every executable fusion (bounded by `MAX_EXPLORED_PAIRS = 20000`).
+  The search is a **linear left-fold** matching FM's real mechanics: a chain starts from a base
+  card, then folds in one card at a time (result + next). A **Field** monster is position 0 —
+  it can only be the base — so `findAllSequences` lets any card be the base but only ever
+  **adds Hand cards** after it (this forces a field monster to the front and forbids two field
+  monsters in one fusion). Non-executable orders (field mid-chain, or tree fusions of two
+  sub-results) are never produced.
   Includes a full pointer-based drag/drop system (mouse + touch long-press) to move/swap
   cards between slots. Also **interactive apply-fusion**: each listed outcome has a "Fuse"
   button that enters placement mode — the user clicks a highlighted slot (empty, or one of

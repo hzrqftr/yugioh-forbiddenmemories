@@ -403,7 +403,7 @@ function teardownDrag() {
 function getPool() {
   return slotStates
     .filter((s) => s.cardId !== null)
-    .map((s) => ({ id: s.cardId, name: state.cardsById.get(s.cardId).name, slotIndex: s.index }));
+    .map((s) => ({ id: s.cardId, name: state.cardsById.get(s.cardId).name, slotIndex: s.index, zone: s.zone }));
 }
 
 function clearSequenceResults() {
@@ -519,65 +519,65 @@ function updateUndoButton() {
   if (btn) btn.disabled = undoStack.length === 0;
 }
 
-// Forbidden Memories only fuses two cards per action, so finding every
-// "possible fusion monster" from a pool means trying every order in which
-// pairs of cards (or already-fused results) could be combined. Each token
-// tracks which of the original pool slots it was built from, so results can
-// show exactly which cards get used and which are left over.
-function findAllSequences(initialCards, includeGlitch) {
+// Forbidden Memories fusion is a LINEAR left-fold: you select cards in order and
+// each is fused onto the running monster (result + next card). A monster already
+// on the FIELD is position 0 — the base — so it is always fused first, and every
+// card added after the base comes from the HAND. So the base may be any card, but
+// additions are hand-only; this forces a field monster to the front and forbids
+// using two field monsters in one fusion. We enumerate every executable chain.
+// `cards[i]` carries `slotIndex`/`zone`; used indices are pool-relative (into `cards`).
+function findAllSequences(cards, includeGlitch) {
   const outcomesByKey = new Map();
+  const seenStates = new Set(); // (runningId | sortedUsedSet) already fully explored
   let exploredPairs = 0;
   let truncated = false;
 
-  const initialTokens = initialCards.map((c, idx) => ({
-    id: c.id,
-    name: c.name,
-    originIndices: [idx],
-    steps: [],
-  }));
+  function record(m, usedIdx, steps) {
+    const usedSlotIndices = [...usedIdx].sort((a, b) => a - b);
+    const key = `${m.resultId}|${usedSlotIndices.join(',')}`;
+    const existing = outcomesByKey.get(key);
+    if (!existing || steps.length < existing.steps.length) {
+      outcomesByKey.set(key, {
+        resultId: m.resultId,
+        resultName: m.resultName,
+        isGlitch: m.isGlitch,
+        description: m.description,
+        usedSlotIndices,
+        steps,
+      });
+    }
+  }
 
-  function explore(tokens) {
-    for (let i = 0; i < tokens.length && !truncated; i++) {
-      for (let j = i + 1; j < tokens.length && !truncated; j++) {
-        exploredPairs++;
-        if (exploredPairs > MAX_EXPLORED_PAIRS) {
-          truncated = true;
-          return;
-        }
+  // Fold one more HAND card onto the running monster (currentId).
+  function extend(currentId, currentName, usedIdx, steps) {
+    if (truncated) return;
+    const stateKey = `${currentId}|${[...usedIdx].sort((a, b) => a - b).join(',')}`;
+    if (seenStates.has(stateKey)) return; // same running monster + same used set → identical downstream
+    seenStates.add(stateKey);
 
-        const matches = findFusionMatches(tokens[i].id, tokens[j].id, includeGlitch);
-        for (const m of matches) {
-          const step = {
-            aName: tokens[i].name,
-            bName: tokens[j].name,
-            resultName: m.resultName,
-            isGlitch: m.isGlitch,
-          };
-          const usedSlotIndices = [...tokens[i].originIndices, ...tokens[j].originIndices].sort((a, b) => a - b);
-          const steps = [...tokens[i].steps, ...tokens[j].steps, step];
+    for (let k = 0; k < cards.length && !truncated; k++) {
+      if (usedIdx.includes(k)) continue;
+      if (cards[k].zone === 'field') continue; // additions are hand-only (field monster can only be the base)
+      exploredPairs++;
+      if (exploredPairs > MAX_EXPLORED_PAIRS) { truncated = true; return; }
 
-          const key = `${m.resultId}|${usedSlotIndices.join(',')}`;
-          const existing = outcomesByKey.get(key);
-          if (!existing || steps.length < existing.steps.length) {
-            outcomesByKey.set(key, {
-              resultId: m.resultId,
-              resultName: m.resultName,
-              isGlitch: m.isGlitch,
-              description: m.description,
-              usedSlotIndices,
-              steps,
-            });
-          }
-
-          const newToken = { id: m.resultId, name: m.resultName, originIndices: usedSlotIndices, steps };
-          const remaining = tokens.filter((_, idx) => idx !== i && idx !== j);
-          explore([...remaining, newToken]);
-        }
+      const matches = findFusionMatches(currentId, cards[k].id, includeGlitch);
+      for (const m of matches) {
+        const step = { aName: currentName, bName: cards[k].name, resultName: m.resultName, isGlitch: m.isGlitch };
+        const nextUsed = [...usedIdx, k];
+        const nextSteps = [...steps, step];
+        record(m, nextUsed, nextSteps);
+        extend(m.resultId, m.resultName, nextUsed, nextSteps);
       }
     }
   }
 
-  explore(initialTokens);
+  // Any card can be the base (position 0). For a field monster this is the only
+  // position it can occupy; all-hand chains simply never use a field card.
+  for (let b = 0; b < cards.length && !truncated; b++) {
+    extend(cards[b].id, cards[b].name, [b], []);
+  }
+
   return { outcomes: [...outcomesByKey.values()], truncated };
 }
 
@@ -625,8 +625,13 @@ function createOutcomeCard(outcome, cards) {
     : '';
 
   const usedSet = new Set(outcome.usedSlotIndices);
+  // A field monster (if used) is always the base — flag it so the order is clear.
+  const fieldIdx = outcome.usedSlotIndices.find((idx) => cards[idx].zone === 'field');
+  const fieldNote = fieldIdx !== undefined
+    ? `<p class="meta field-note">Starts on the field: ${escapeHtml(cards[fieldIdx].name)}</p>`
+    : '';
   const usedChips = outcome.usedSlotIndices
-    .map((idx) => `<span class="chip">${escapeHtml(cards[idx].name)}</span>`)
+    .map((idx) => `<span class="chip${cards[idx].zone === 'field' ? ' field-base' : ''}">${escapeHtml(cards[idx].name)}</span>`)
     .join('');
   const leftoverChips = cards
     .filter((_, idx) => !usedSet.has(idx))
@@ -655,6 +660,7 @@ function createOutcomeCard(outcome, cards) {
       <h3>${escapeHtml(outcome.resultName)}${outcome.isGlitch ? '<span class="badge">Glitch</span>' : ''}</h3>
       <p class="meta">${escapeHtml(statLine)}</p>
       <p>${escapeHtml(outcome.description)}</p>
+      ${fieldNote}
       <p class="meta">Uses ${outcome.usedSlotIndices.length} of your ${cards.length} card${cards.length === 1 ? '' : 's'}:</p>
       <div class="chips">${usedChips}</div>
       ${leftoverChips ? `<p class="meta">Left over:</p><div class="chips">${leftoverChips}</div>` : ''}

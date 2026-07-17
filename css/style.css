@@ -765,6 +765,9 @@ button.secondary:disabled { opacity: 0.35; cursor: not-allowed; }
 /* Interactive apply-fusion */
 .seq-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
 .apply-fusion-btn { margin-top: 0.7rem; font-size: 0.78rem; }
+/* Field monster = fusion base (position 0) */
+.field-note { color: var(--accent-hi); }
+.chip.field-base { border-color: var(--accent); color: var(--accent-hi); }
 .card-slot.place-target {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
